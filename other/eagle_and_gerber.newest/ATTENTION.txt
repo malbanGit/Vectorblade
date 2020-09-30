@@ -1,0 +1,8 @@
+The NAND chip on the PCB is about 1/2 a millimeter to near to
+the spacer of the (standard) Sean Kelly cartridge.
+
+If you use this exact PCB you have to shave off a little bit of
+the said spacer in order to properly close the cartridge.
+
+I only discovered this after I ordered more than 100 PCB's and the
+shaving is done in a second - so I never changed the design.

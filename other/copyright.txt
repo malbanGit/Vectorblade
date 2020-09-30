@@ -1,0 +1,119 @@
+All files from Vectorblade are placed in public domain, except where noted!
+
+
+NOT public domain:
+---
+
+Directory: "pin"
+---------------
+
+The image "pin.jpg" was designed by Jacek Selanski and is copyright by Jacek Selanski.
+
+Jacek Selanski gave permission to use this image to produce pins and distribute those with Vectorblade.
+The image may be used by others for exactly this purpose only: Create pins!
+
+Using the image for other purposes is not allowed (creating images for web pages,
+T-Shirt design or any other imaginable thing).
+
+It is also not allowed to use parts of the image or change/alter the image and use or distribute derivates.
+
+
+Directory: "vectoranimation"
+----------------------------
+All vectorlists contained within this directory were drawn and designed by Malban and are public domain.
+
+EXCEPT:
+
+The title:
+  _ng_Tiltescript.xml
+  _ng_TiltescriptBig.xml
+  _ng_TiltescriptBigCenter.xml
+
+The ship from the title:
+  _ng_Titleship.xml
+  _ng_TitleshipEngineAnim.xml
+
+The boss 1 intro:
+  _ngE_Boss1Intro.xml
+  _ngE_Boss1Intro1.xml
+  _ngE_Boss1Intro2.xml
+  _ngE_Boss1IntroAntenna.xml
+
+The boss 2 intro:
+  _ngE_Boss2Intro.xml
+  _ngE_Boss2Intro1.xml
+  _ngE_Boss2Intro2.xml
+  _ngE_Boss2IntroClosed.xml
+  _ngE_Boss2IntroMiddle.xml
+  _ngE_Boss2IntroOpen.xml
+
+The boss 3 intro:
+  _ngE_Boss3Intro.xml
+
+The boss 4 intro:
+  _ngE_Boss4Intro.xml
+  _ngE_Boss4Intro2.xml
+  _ngE_Boss4Intro3.xml
+  _ngE_Boss4Intro4.xml
+  _ngE_Boss4Intro4Shots.xml
+
+The player ship from the boss intro:
+  _ngE_BossPlayership.xml
+  _ngE_BossPlayershipAccel.xml
+
+These were designed by Jacek Selanski and are copyright by Jacek Selanski.
+
+Jacek Selanski gave permission to use these vectorlists with Vectorblade.
+These vectorlists are provided for this purpose only.
+
+It is not allowed to use parts of the vectorlists or change/alter the lists and reuse them in
+other games or distribute derivates.
+
+Directory: "images"
+-------------------
+All files within this directory:
+bug1.xcf
+ship1.xcf
+title.xcf
+VB-logo_V2.ai
+VB-logo.ai
+
+Were designed by Jacek Selsanski and are copyright by Jacek Selanski.
+The graphics were used to design the overlay, box and the instruction manual of Vectorblade.
+
+Jacek Selanski gave permission to use these images with Vectorblade for above stated purpose only.
+It is not allowed to use parts of the images or change/alter the images and reuse them in
+other games or distribute derivates.
+
+Usage for "other" Vectorblade distribution/boxes is granted however!
+
+Directory: "overlay"
+-------------------
+The file contained in that dirctory "VB-Overlay-V4.eps"
+was designed by Jacek Selsanski and is copyright by Jacek Selanski.
+
+That file includes all information to print a multi layered overlay for Vectorblade.
+
+It is not allowed to use parts of the images or change/alter the images and reuse them in
+other games or distribute derivates.
+
+Usage to create additional Vectorblade overlays is granted however!
+
+
+Directory: "box"
+----------------
+All files within this directory:
+Box-cutter.pdf
+Vectorblade-box-printdoc-V4.pdf
+Vectorblade-box-printdoc-VectrexLogo_Missing.pdf*
+
+* only provided to show the cutter markings
+
+Were designed by Jacek Selsanski and are copyright by Jacek Selanski.
+The graphics can be used to print out an "original" sized box for Vectorblade.
+
+Jacek Selanski gave permission to use these images with Vectorblade for above stated purpose only.
+It is not allowed to use parts of the images or change/alter the images and reuse them in
+other games or distribute derivates.
+
+Usage to create "other" Vectorblade boxes is granted however!

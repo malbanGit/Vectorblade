@@ -1,0 +1,18 @@
+Ordered from digi-key
+
+Number                            Description
+
+296-1466-5-ND
+SN74AHC132N                       IC GATE NAND SCHMITT 4CH 14DIP
+
+SST39SF020A-70-4C-PHE-ND
+SST39SF020A-70-4C-PHE             IC FLASH 2M PARALLEL 32DIP
+
+1212-1049-ND
+115-87-632-41-003101 	            CONN IC DIP SOCKET 32POS GOLD
+
+The last part is a flat socket, since I like to socket the flash chip.
+Note: That socket fits within a cartridge!
+
+
+DIGI-KEY link for 100 pieces each: http://www.digikey.de/short/zbb9hr

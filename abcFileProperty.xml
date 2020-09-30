@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<AllFileProperties>
+	<FileProperties>
+		<Class>FileProperty</Class>
+		<Name>abc.i</Name>
+		<Filename>_projects/Vectorblade/abc.i</Filename>
+		<Typ></Typ>
+		<ActionScript></ActionScript>
+		<PreScriptName></PreScriptName>
+		<PreScriptClass></PreScriptClass>
+		<Flags></Flags>
+		<Description></Description>
+		<Version></Version>
+		<Paremeter1></Paremeter1>
+		<Paremeter2></Paremeter2>
+		<Paremeter3></Paremeter3>
+		<PostScriptName></PostScriptName>
+		<PostScriptClass></PostScriptClass>
+		<ActionScriptName>execute VFSerial</ActionScriptName>
+		<ActionScriptClass>Utility</ActionScriptClass>
+		<NoInternalProcessing>false</NoInternalProcessing>
+	</FileProperties>
+</AllFileProperties>

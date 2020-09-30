@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<AllProjectProperties>
+	<ProjectProperties>
+		<Class>Project</Class>
+		<Name>Vectorblade4Bank</Name>
+		<FileVersion>2</FileVersion>
+		<ProjectName>Vectorblade4Bank</ProjectName>
+		<DirectoryName></DirectoryName>
+		<Path>projects</Path>
+		<MainFile>abc.i</MainFile>
+		<Description></Description>
+		<Version>1.0</Version>
+		<Author></Author>
+		<Bankswitching>4 bank PB6/IRQ</Bankswitching>
+		<createBankswitchCode>true</createBankswitchCode>
+		<createGameLoopCode>true</createGameLoopCode>
+		<NumberOfBanks>4</NumberOfBanks>
+		<BankMainFiless>
+			<BankMainFiles>mainBank0.asm</BankMainFiles>
+			<BankMainFiles>mainBank1.asm</BankMainFiles>
+			<BankMainFiles>mainBank2.asm</BankMainFiles>
+			<BankMainFiles>mainBank3.asm</BankMainFiles>
+		</BankMainFiless>
+		<Extras>50855936</Extras>
+		<ProjectPreScriptClass></ProjectPreScriptClass>
+		<ProjectPreScriptName></ProjectPreScriptName>
+		<ProjectPostScriptClass>Utility</ProjectPostScriptClass>
+		<ProjectPostScriptName>execute VFSerial</ProjectPostScriptName>
+		<BankDefiness>
+			<BankDefines>QUAD_BANK=1</BankDefines>
+			<BankDefines>QUAD_BANK=1</BankDefines>
+			<BankDefines>QUAD_BANK=1</BankDefines>
+			<BankDefines>QUAD_BANK=1</BankDefines>
+		</BankDefiness>
+		<WheelName></WheelName>
+		<IsCDebugging>false</IsCDebugging>
+		<IsCPeephole>false</IsCPeephole>
+		<IsCKeepEnriched>false</IsCKeepEnriched>
+		<IsCProject>false</IsCProject>
+		<IsPeerCProject>false</IsPeerCProject>
+		<CFLAGS>-O3 -mint8 -msoft-reg-count=0 -quiet -IC/include</CFLAGS>
+		<IsCRumInlined>false</IsCRumInlined>
+	</ProjectProperties>
+</AllProjectProperties>
