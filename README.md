@@ -13,6 +13,11 @@ http://vide.malban.de/vectorblade
 
 Also look in the "menu" of the Vectorblade item.
 
+Concerning the coding of Vectorblade and the source structure, look especially at:
+
+http://vide.malban.de/vectorblade/building-vectorblade
+
+
 Thank you!
 
 Malban
