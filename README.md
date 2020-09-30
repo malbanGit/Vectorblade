@@ -1,6 +1,6 @@
 # Vectorblade
 
-These are all ressources for "Vectorblade" a Vectrex game and port of the good old "Warblade".
+These are all sources and ressources for "Vectorblade" a Vectrex game and port of the good old "Deluxe Galaga" / "Warblade".
 
 To build it you <b>need</b> Vide, since the game consists of four seperated banks and address information "over" banks is injected into each 
 bank-binary by Vide in an additional "linker" stage.
