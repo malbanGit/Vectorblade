@@ -11,8 +11,7 @@
                                                           ; fixed: pause mode glitch, shots can go thru shields
                                                           ; fixed:in dodger was potential to get the multiplyers mixed up
                                                           ; added version number to title
-
-; done: debounce of button 4 upon entering highscore from desktop upon first entry
+;                    DB       "VERSION 1.04"              ; fixed: debounce of button 4 upon entering highscore from desktop upon first entry
 
 
 ;
@@ -244,7 +243,7 @@ NONE                =        0
                     DB       "VECTORBLADE", $80           ; some game information, ending with $80
 version
                     DB       $Fb, $40, -$00, -$40          ; hight, width, rel y, rel x (from 0,0) 
-                    DB       "VERSION 1.03",$80               ; some game information
+                    DB       "VERSION 1.04",$80               ; some game information
 ; if  VECFEVER = 1
 ;                    DB       $F8, $50, -$00, -$50           ; hight, width, rel y, rel x (from 0,0)
 ;                    DB       "GOLD 5 (VF)", $80            ; some game information, ending with $80
