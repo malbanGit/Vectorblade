@@ -3079,15 +3079,16 @@ saveCurrentGame                                           ;#isfunction
                     lda      flashAvailable 
                     anda     # FLASH_AVAILABLE_BIT        ; no game available 
                     lbeq     flashErrorOut 
-                    jsr      writeFlashByte_2RAMA000 
-                    ldx      #$a000 
+                    jsr      writeFlashByte_2RAMA000      ;copy flash write routine to RAM
+                    ldx      #$a000
                     lda      #SAVE_GAME_MARKER 
                     jsr      bank0flashUserRAM 
-                    leax     1,x 
-; write all RAM
+;read all 1KBi of RAM and write to FLASH starting at $a001
+                    leax     1,x
                     ldu      #$c800 
 writeNextRAMByte 
-                    lda      ,u+ 
+                    lda      ,u                           ; read RAM once to ensure address lines are set
+                    lda      ,u+                          ; now read it again and advance reg u
                     jsr      bank0flashUserRAM 
                     leax     1,x 
                     cmpu     #$cc00 
