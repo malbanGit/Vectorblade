@@ -397,11 +397,13 @@ writeFlashByte_Start
                     stb      $5555 
                     sta      0, x 
                                                           ; wait for write to be done 
-writeByteToggleLoop 
-                    ldb      0, x 
-                    eorb     0, x 
-                    andb     #%01000000 
-                    bne      writeByteToggleLoop 
+                    nop                                   ; force a tiny wait to ensure switching from write
+                                                          ; to read works work with fast logic gates.
+writeByteToggleLoop
+                    ldb      0, x                         ; wait for DQ6 toggle bit to be the same,
+                    eorb     0, x                         ; which indicates write is complete.
+                    andb     #%01000000                   ;  |
+                    bne      writeByteToggleLoop          ;  |
                     rts      
 
 writeFlashByte_End 
