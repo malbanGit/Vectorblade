@@ -142,6 +142,9 @@ notDown2t
                     lda      #$5f 
 notDown2t_icon 
                     _INTENSITY_A  
+; V1.06
+ ldb #1
+ STB     <VIA_port_b     ;turn off mux
 ; draw high score stairs
                     ldd      #$da00 
                     MY_MOVE_TO_D_START_NO_SHIFT  
@@ -158,6 +161,9 @@ notDown2t_icon
                     lda      #$5f 
 notUp2t_icon 
                     _INTENSITY_A  
+; V1.06
+ ldb #1
+ STB     <VIA_port_b     ;turn off mux
                     ldd      #$5700 
                     MY_MOVE_TO_D_START_NO_SHIFT  
                     lda      #$05 
@@ -184,6 +190,9 @@ zeroF
                     lda      #$5f 
 notRight2t_icon 
                     _INTENSITY_A  
+; V1.06
+ ldb #1
+ STB     <VIA_port_b     ;turn off mux
                     ldd      #$1657 
                     MY_MOVE_TO_D_START_NO_SHIFT  
                     lda      #$05 
@@ -200,6 +209,9 @@ notRight2t_icon
                     lda      #$5f 
 notLeft2t_icon 
                     _INTENSITY_A  
+; V1.06
+ ldb #1
+ STB     <VIA_port_b     ;turn off mux
                     ldd      #$1ea3 
                     MY_MOVE_TO_D_START_NO_SHIFT  
                     lda      #$05 
