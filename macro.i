@@ -266,33 +266,84 @@ MY_MOVE_TO_D        macro
 ;***************************************************************************
 _INTENSITY_A_8      macro    
                     STA      <VIA_port_a                  ;Store intensity in D/A 
-                    LDD      #$8584                       ;mux disabled channel 2 
-                    STA      <VIA_port_b                  ; 
-                    STB      <VIA_port_b                  ;mux enabled channel 2 
-                    STA      <VIA_port_b                  ;turn off mux 
+;                    LDD      #$8584                       ;mux disabled channel 2 
+;                    STA      <VIA_port_b                  ; 
+;                    STB      <VIA_port_b                  ;mux enabled channel 2 
+;                    STA      <VIA_port_b                  ;turn off mux 
+
+; V1.06b
+                LDD     #$8584          ;mux disabled channel 2
+                STA     <VIA_port_b
+                STB     <VIA_port_b     ;mux enabled channel 2
+                STB     <VIA_port_b     ;do it again just because
+                LDB     #$81
+                STB     <VIA_port_b     ;turn off mux
+
+
                     endm     
 _INTENSITY_A        macro    
                     STA      <VIA_port_a                  ;Store intensity in D/A 
-                    LDD      #$0504                       ;mux disabled channel 2 
-                    STA      <VIA_port_b                  ; 
-                    STB      <VIA_port_b                  ;mux enabled channel 2 
-                    STA      <VIA_port_b                  ;turn off mux 
+;                    LDD      #$0504                       ;mux disabled channel 2 
+;                    STA      <VIA_port_b                  ; 
+;                    STB      <VIA_port_b                  ;mux enabled channel 2 
+;                    STA      <VIA_port_b                  ;turn off mux 
+
+; V1.06b
+                LDD     #$0504          ;mux disabled channel 2
+                STA     <VIA_port_b
+                STB     <VIA_port_b     ;mux enabled channel 2
+                STB     <VIA_port_b     ;do it again just because
+                LDB     #$01
+                STB     <VIA_port_b     ;turn off mux
+
+
+
                     endm     
+
+
+
+
 _INTENSITY_A_ONLY   macro    
                     STA      <VIA_port_a                  ;Store intensity in D/A 
+
+;                    LDa      #$05                         ;mux disabled channel 2 
+;                    STA      <VIA_port_b                  ; 
+;                    deca     
+
+;                    STa      <VIA_port_b                  ;mux enabled channel 2 
+;                    inca     
+;                    STA      <VIA_port_b                  ;turn off mux 
+
+; V1.06b
                     LDa      #$05                         ;mux disabled channel 2 
                     STA      <VIA_port_b                  ; 
                     deca     
+
                     STa      <VIA_port_b                  ;mux enabled channel 2 
-                    inca     
+                    STa      <VIA_port_b                  ;mux enabled channel 2 
+                    LDA #1     
                     STA      <VIA_port_b                  ;turn off mux 
+
+
                     endm     
+
 _INTENSITY_B        macro    
                     STB      <VIA_port_a                  ;Store intensity in D/A 
-                    LDD      #$0504                       ;mux disabled channel 2 
-                    STA      <VIA_port_b                  ; 
-                    STB      <VIA_port_b                  ;mux enabled channel 2 
-                    STA      <VIA_port_b                  ;turn off mux 
+
+;                    LDD      #$0504                       ;mux disabled channel 2 
+;                    STA      <VIA_port_b                  ; 
+;                    STB      <VIA_port_b                  ;mux enabled channel 2 
+;                    STA      <VIA_port_b                  ;turn off mux 
+
+; V1.06b
+                LDD     #$0504          ;mux disabled channel 2
+                STA     <VIA_port_b
+                STB     <VIA_port_b     ;mux enabled channel 2
+                STB     <VIA_port_b     ;do it again just because
+                LDB     #$01
+                STB     <VIA_port_b     ;turn off mux
+
+
                     endm     
 ; uses x and d
 ; prints the numbers in a and b at a location given
