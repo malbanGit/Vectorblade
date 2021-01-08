@@ -5,6 +5,9 @@ pauseLineCount      =        laserLowestYLeft
 pauseLinePos        =        laserEnemyPointerRight 
 lastPauseDir        =        laserLowestY 
 pauseScrollOffsertY  =       laserEnemyPointerLeft 
+
+debouncePause = laserEnemyPointerLeft + 1
+
 PAUSE_SCROLL_OFFSET  =       40 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -117,23 +120,23 @@ drunkPauseCont
                     ldd      #$4088 
                     ldu      #DrunkString1 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;                    _ZERO_VECTOR_BEAM  
                     ldd      #$2088 
                     ldu      #DrunkString2 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;                    _ZERO_VECTOR_BEAM  
                     ldd      #$1088 
                     ldu      #DrunkString3 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;                    _ZERO_VECTOR_BEAM  
                     ldd      #$0088 
                     ldu      #DrunkString4 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;                    _ZERO_VECTOR_BEAM  
                     ldd      #$e088 
                     ldu      #DrunkString1 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;                    _ZERO_VECTOR_BEAM  
                     bra      pauseLoop 
 
 ;
@@ -141,6 +144,21 @@ drunkPauseCont
 ;
 pause00:                                                  ;#isfunction  
 pause_0_0:                                                ;#isfunction  
+
+
+
+; debounce butons
+                    JSR      getButtonState               ; get button status 
+ if ADDITIONAL_INPUT = 1
+ cmpa #$f
+ bne pause00
+ lda #25
+ sta debouncePause
+ endif
+ 
+
+
+
                     JSR      Init_Music_Buf               ; shadow regs 
 REPLACE_1_2_copySoundRegs_varFromIRQ1_5 
                     ldx      #0                           ; copySoundRegs 
@@ -150,7 +168,13 @@ REPLACE_1_2_copySoundRegs_varFromIRQ1_5
                     clr      pauseScrollOffsertY 
 ;;;;;
 pauseLoop 
+ lda debouncePause
+ beq PSloop1
+ dec debouncePause
+
+
 PSloop1 
+
                     lda      pauseScrollOffsertY 
                     beq      doNothingOffsetty 
                     bpl      decreaseOffsetPause 
@@ -177,7 +201,21 @@ doNothingOffsetty
                     std      Vec_Text_HW 
                     lda      #5 
                     sta      pauseLineCount 
+
+ if ADDITIONAL_INPUT = 1
+
+ ldb debouncePause
+ bne clearPuaseChange; noDirCheck_devounce
+
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq defaultInput_P ; beq
+ bra dontgetJoystick
+defaultInput_P
+ endif
+
                     jsr      Joy_Digital_vertical_0_0 
+dontgetJoystick
                     lda      Vec_Joy_1_Y 
                     beq      clearPuaseChange 
                     cmpa     lastPauseDir 
@@ -227,6 +265,31 @@ clearPuaseChange
                     sta      lastPauseDir 
 noJoyPauseChange 
                     JSR      getButtonState               ; get button status 
+
+
+
+ if ADDITIONAL_INPUT = 1
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq defaultInput_P2 ; beq
+
+; remap button 2 to button 1
+ ; clr button 1
+ ora #1
+ bita #2
+ bne notPressed21
+ anda #$f-1 ; press button 1
+
+notPressed21
+ 
+
+defaultInput_P2
+ endif
+
+
+
+
+
                     bita     #1                           ; button 4 unpause 
                     bne      noPauseHelp 
 REPLACE_1_2_showPSHelp_varFromIRQ0_1 
@@ -256,10 +319,10 @@ REPLACE_1_2_displayScore_varFrom1_1                       ;  bank 1 replace
                     ldu      #pauseString                 ;pauseString 
                     jsr      Print5Strd 
                     _ZERO_VECTOR_BEAM  
-                    lda      #$fb                         ;10 
+                    ldd      #$fb  *256+5                       ;10 
                     sta      Vec_Text_HW 
-                    lda      #5 
-                    sta      pauseLineCount 
+;                    lda      #5 
+                    stb      pauseLineCount 
                     ldd      #$2690                       ;#$26a0 
                     std      pauseLinePos 
                     lda      pauseLineStart 
@@ -313,29 +376,29 @@ line0_
                     ldd      pauseLinePos 
                     adda     pauseScrollOffsertY 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;;                    _ZERO_VECTOR_BEAM  
                     DEC_YPOS_to_d  
 line0 
 ; Print Level + number
 ;                    ldd      pauseLinePos 
                     ldu      #currentLeveString 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;;                    _ZERO_VECTOR_BEAM  
                     jsr      fillLevelString 
                     lda      pauseLinePos 
                     LDD_CURRENT_SECONDARY_POS  $50 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;;                    _ZERO_VECTOR_BEAM  
                     DEC_YPOS_to_d  
 line2 
 ; print lives+ number
                     ldu      #LivesString                 ;LivesString 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;;                    _ZERO_VECTOR_BEAM  
                     ldu      #playerLivesString 
                     LDD_CURRENT_SECONDARY_POS  $46 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;;                    _ZERO_VECTOR_BEAM  
                     DEC_YPOS_to_d  
 line1 
 ; Print Cash + number
@@ -343,7 +406,7 @@ line1
                     bmi      noChashDisplay 
                     ldu      #cashString                  ;cashString 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;;                    _ZERO_VECTOR_BEAM  
                     ldd      playerCashW 
                     ldu      #StringOutputBuffer_4 
                     jsr      wordToDecString 
@@ -351,33 +414,33 @@ line1
                     ldu      #StringOutputBuffer_4 
                     jsr      syncPrintStrd                ; Print5Strd 
 noChashDisplay 
-                    _ZERO_VECTOR_BEAM  
+;;                    _ZERO_VECTOR_BEAM  
                     DEC_YPOS_to_d  
 line3 
 ; print shots fired + number
                     ldu      #shotsFiredString            ;shotsFiredString 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;;                    _ZERO_VECTOR_BEAM  
                     ldd      playerShotCountW 
                     ldu      #StringOutputBuffer_4 
                     jsr      wordToDecString 
                     LDD_CURRENT_SECONDARY_POS  $30 
                     ldu      #StringOutputBuffer_4 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;;                    _ZERO_VECTOR_BEAM  
                     DEC_YPOS_to_d  
 line4 
 ; print enemies hit + number
                     ldu      #enemiesHitString            ;enemiesHitString 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;;                    _ZERO_VECTOR_BEAM  
                     ldd      playerHitCountW 
                     ldu      #StringOutputBuffer_4 
                     jsr      wordToDecString 
                     LDD_CURRENT_SECONDARY_POS  $30 
                     ldu      #StringOutputBuffer_4 
                     jsr      syncPrintStrd                ; Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;;                    _ZERO_VECTOR_BEAM  
                     DEC_YPOS_to_d  
 line19_4 
 ; WEAPON

@@ -571,6 +571,7 @@ REPLACE_1_2_starsDoneIn0_varFromIRQ1_2
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 nextLevel                                                 ;#isfunction  
+ clr playerWasHitFor ; add V1.07 Gregg Woocock bug, player dead and level clear at the same time, leads to endless loop
 REPLACE_1_2_levelDoneAchievementTest_varFrom0_1 
                     ldx      #0                           ;levelDoneAchievementTest 
                     jmp      jmpBank0X 
@@ -1253,7 +1254,11 @@ easy3
 noBugsInThisLevel 
                     lda      LEVEL_MAX_ITEMS,x 
                     anda     #$f 
-                    lsra     
+                    lsra   
+ bne itemsOK
+; V1.07
+ inca ; at least 1!
+itemsOK  
                     sta      levelMaxAttackPatterns 
                     lda      LEVEL_MAX_ITEMS,x 
                     lsra     

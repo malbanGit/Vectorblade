@@ -62,6 +62,10 @@ SaucerWindow_7
                     db       -$33, $01, -$37 
                     db       -$09, $01, $34 
                     db       $53, $01, $7F, hi(SMVB_startMove_single_sj), lo(SMVB_startMove_single_sj), hi(Saucer), lo(Saucer) 
+
+; SAUCER
+ if  VECFEVER = 1 
+ else
 Saucer 
                     db       $0A, $01, -$3A, hi(SMVB_startDraw_single), lo(SMVB_startDraw_single) 
                     db       -$0A, $01, -$3A, hi(SMVB_continue7_single), lo(SMVB_continue7_single) 
@@ -92,6 +96,9 @@ Saucer
 ; only for very cranky?
 ;                    db       -$29, $01, -$10, hi(SMVB_startMove_single), lo(SMVB_startMove_single) 
                     db       $40, $00, $00, hi(SMVB_lastDraw_rts), lo(SMVB_lastDraw_rts) 
+ endif
+
+
 MoneyMothershipAnim 
                     DW       MoneyMothership_0            ; list of all single vectorlists in this 
                     DW       MoneyMothership_1 

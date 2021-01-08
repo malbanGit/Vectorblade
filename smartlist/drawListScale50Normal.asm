@@ -288,6 +288,8 @@ SMVB50_startMove_tripple
                     ADD_NOPS  
                     bra      move2_50 
 
+ if CURRENT_BANK = 2
+ else
 SMVB50_startMove_double_sj                                ;#isfunction  
                     SET_Y_INT  
                     ldu      ,u 
@@ -298,15 +300,19 @@ SMVB50_startMove_double_sj                                ;#isfunction
                     clr      <VIA_t1_cnt_hi 
                     ADD_NOPS                              ; reduced by ldu ,u - 5 cycles 
                     pulu     b,x, pc 
+ endif
 SMVB50_startMove_yStays_single                            ;#isfunction  
                     INIT_MOVE  
                     ADD_NOPS  
                     pulu     b,x,pc 
+ if CURRENT_BANK = 2
+ else
 SMVB50_startMove_yStays_single_sj 
                     ldu      ,u 
                     INIT_MOVE_SJ  
                     ADD_NOPS_NOU                          ; reduced by ldu ,u - 5 cycles 
                     pulu     b,x,pc 
+ endif
 ; assuming b = 1
 SMVB50_startDraw_yStays_single                            ;#isfunction  
                     stb      <VIA_shift_reg               ; 4 
@@ -320,6 +326,8 @@ SMVB50_startDraw_xyStays_single                           ;#isfunction
                     sta      <VIA_t1_cnt_hi 
                     ADD_NOPS  
                     pulu     b,x,pc 
+ if CURRENT_BANK = 2
+ else
 SMVB50_startDraw_yStays_single_sj                         ;#isfunction  
 ;                    ldb      #SHITREG_POKE_VALUE          ; 2 
                     stb      <VIA_shift_reg               ; 4 
@@ -328,6 +336,7 @@ SMVB50_startDraw_yStays_single_sj                         ;#isfunction
                     ADD_NOPS_NOU                          ; reduced by ldu ,u - 5 cycles 
                     ldu      ,u 
                     pulu     b,x,pc 
+ endif
 SMVB50_startDraw_yd4_single:                              ;#isfunction  
 SMVB50_startDraw_single:                                  ;#isfunction  
                     SET_Y_INT  

@@ -230,9 +230,24 @@ spaceloopDone
                     dec      tmp_count 
                     lbne     next_score_entry_edit 
                     jsr      getButtonState               ; is a button pressed? 
+
+ if ADDITIONAL_INPUT = 1
+ stb messageState
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq do_hs_normalButtons
+                    bita     #2
+                    bne      noHelpHSPure 
+ bra showHS_help
+do_hs_normalButtons
+ else
                     lbeq     edit_highscore_inner 
+ endif
+
+
                     bita     #1 
                     bne      noHelpHSPure 
+showHS_help
 REPLACE_1_2_showHSPureHelp_varFromIRQ0_1 
                     ldx      #0                           ;showHSPureHelp 
                     jmp      jmpBank0X 
@@ -263,11 +278,38 @@ doOnly7_bc
 
 noHelpHSPure 
 check_buttons_edit 
+
+ if ADDITIONAL_INPUT = 1
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq do_hs_normalButtons2
+
+ sta      tmpButtonMode 
+ ldb Vec_Joy_1_X 
+ cmpb messageTimer
+ bne mode_check_continue
+ stb messageTimer
+ bra noModeSwitch
+
+mode_check_continue
+ stb messageTimer
+
+ cmpb #-10
+ bne noModeSwitch 
+ bra doModeSwitch
+ else
                     cmpa     tmpButtonMode 
                     lbeq     edit_highscore_inner 
                     sta      tmpButtonMode 
+ endif
+do_hs_normalButtons2
+                    cmpa     tmpButtonMode 
+                    lbeq     edit_highscore_inner 
+ sta      tmpButtonMode 
+
                     bita     #2                           ; button 2 switches HS mode 
                     bne      noModeSwitch 
+doModeSwitch
                     clra     
                     ldu      #highScoreBlock 
                     ldb      tmpHiMode 
@@ -280,6 +322,21 @@ normnalHSMode2
                     jmp      edit_highscore_inner 
 
 noModeSwitch 
+
+
+ if ADDITIONAL_INPUT = 1
+ ldb messageState
+ lda tmpButtonMode
+                    bita     #8
+                    bne      edit_highscore_inner 
+                    ldb      #3 
+                    stb      last_button_state 
+                    stb      current_button_state 
+
+ rts
+ else
+
+
                     cmpb     #3                           ; same aslast state 
                     lbeq     edit_highscore_inner 
                     cmpb     #2                           ; as released - possibly from highscore return 
@@ -288,6 +345,7 @@ noModeSwitch
                     stb      last_button_state 
                     stb      current_button_state 
 ; restore player hs
+ endif
 exitHighScore 
                     rts      
 

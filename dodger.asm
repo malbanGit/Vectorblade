@@ -222,6 +222,23 @@ REPLACE_1_2_getButtonState_varFrom0_3                     ;  bank 0 replace
 ; bit == 1 = not pressed
 ; a = xxxx 0000
 ;          4321 - buttons
+
+ if ADDITIONAL_INPUT = 1
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq do_dodger_normalButtons2
+
+; button 1 is mapped to button 2
+; therefor we must remap button 2 to 3 again !!
+ ora #4 ; reset button 1
+ bita #2
+ bne button2dontmatter
+ anda #$f-4
+
+button2dontmatter
+ endif
+
+do_dodger_normalButtons2
                     bita     #%00000001 
                     bne      noMSHelp 
 REPLACE_1_2_showMSHelp_varFromIRQ0_3 

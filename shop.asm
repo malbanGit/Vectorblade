@@ -152,10 +152,20 @@ JoyMoveDoneShop
                     lda      Vec_Loop_Count+1 
                     bita     #1 
                     beq      ButtonOnlyShop 
+
+ if ADDITIONAL_INPUT = 1
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ bne button_Is_enough
+ endif
+
 REPLACE_1_2_queryJoystick_varFromIRQ0_4 
                     ldx      #0                           ; queryJoystick 
                     jsr      jsrBank0X 
                     jmp      passedFailure                ;noButtonActionShopFailur 
+button_Is_enough
+
+
 
 ButtonOnlyShop 
                     JSR      getButtonState               ; get button status 

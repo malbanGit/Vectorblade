@@ -13,6 +13,13 @@ CURRENT_BANK        EQU      1                            ;
 ;***************************************************************************
 ; INCLUDE  "VBTitle/drawRoutines.i"      
 Wait_Recal_noShift                                        ;#isfunction  
+ if  VECFEVER = 1 
+
+REPLACE_1_2_bank0WaitRecal_varFromIRQ0_14 
+                    ldx      #0                           ;bank0WaitRecal 
+                    jmp      jsrBank0X 
+
+ else
                     LDX      Vec_Loop_Count               ;Increment loop counter 
                     LEAX     1,X 
                     STX      Vec_Loop_Count 
@@ -45,7 +52,7 @@ LF19E_1:            BITA     <VIA_int_flags               ;Wait for timer t2
                     STB      <VIA_port_b                  ;disable mux 
                                                           ; TODO JMP Recalibrate 
                     rts      
-
+ endif
 ;
 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -118,7 +125,7 @@ promotion_denied_loop
                     sta      VIA_t1_cnt_lo 
                     ldd      ,u++ 
                     jsr      syncPrintStrd 
-                    _ZERO_VECTOR_BEAM  
+               ;;     _ZERO_VECTOR_BEAM  
                     ldu      #promotionDeniedText2 
                     ldd      ,u++ 
                     jsr      syncPrintStrd 
@@ -2401,7 +2408,7 @@ beQuiet                                                   ;#isfunction
                     std      sfx_pointer_3 
                     std      sfx_pointer_2 
                     std      sfx_pointer_1 
-                    CLR      Vec_Music_Flag               ; no music is playing ->0 (is placed in rottist! 
+                    sta      Vec_Music_Flag               ; no music is playing ->0 (is placed in rottist! 
                     JSR      Init_Music_Buf               ; shadow regs 
                     JMP      Do_Sound                     ; ROM function that does the sound playing, here used to clear all regs 
 
@@ -2482,10 +2489,17 @@ noIntensityUp
                     jsr      SMVB_drawSmart 
 noTopArrow 
                     jsr      Intensity_3F 
-;                    jsr      queryJoystick 
+
+
+ if ADDITIONAL_INPUT = 1
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ bne noAchievJoy
+ endif
 REPLACE_1_2_queryJoystick_varFromIRQ0_1 
                     ldx      #0                           ; queryJoystick 
                     jsr      jsrBank0X 
+noAchievJoy
                     lda      Vec_Joy_1_Y 
                     beq      clearAchiChange 
                     cmpa     lastAchiDir 
@@ -2520,11 +2534,25 @@ achiDirDown
 clearAchiChange 
                     sta      lastAchiDir 
 noJoyAchiChange 
+
                     JSR      getButtonState               ; get button status 
                     bita     #8                           ; button 4 return 
                     lbeq     exitAchievements 
+
+ if ADDITIONAL_INPUT = 1
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq noAchievJoy_22
+                    bita     #2                          ; button 2 (remap) help 
+                    bne      continueAchievements 
+ bra doachievHelp
+noAchievJoy_22
+ endif
+
+
                     bita     #1                           ; button 1 help 
                     bne      continueAchievements 
+doachievHelp
 REPLACE_1_2_showASHelp_varFromIRQ0_1 
                     ldx      #0                           ;showASHelp 
                     jmp      jmpBank0X 
@@ -2540,7 +2568,7 @@ continueAchievements
 ; adda achievementYOffset
                     ldu      #achiString                  ; 
                     jsr      syncPrintStrd 
-                    _ZERO_VECTOR_BEAM  
+;                    _ZERO_VECTOR_BEAM  
                     ldd      #$fb30 
                     std      Vec_Text_HW 
                     ldy      #achivementPointers 
@@ -2552,22 +2580,22 @@ continueAchievements
                     ldd      #$4090 -$1800 
                     adda     achievementYOffset 
                     jsr      syncPrintStrd 
-                    _ZERO_VECTOR_BEAM  
+;                    _ZERO_VECTOR_BEAM  
                     ldd      #$f090+$2000 
                     ldu      #whenString 
                     adda     achievementYOffset 
                     jsr      syncPrintStrd                ;Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;                    _ZERO_VECTOR_BEAM  
                     ldd      #$e0a0 +$2000 
                     ldu      ,y++ 
                     adda     achievementYOffset 
                     jsr      syncPrintStrd 
-                    _ZERO_VECTOR_BEAM  
+;                    _ZERO_VECTOR_BEAM  
                     ldd      #$c090 +$2000 
                     ldu      #rewardsString 
                     adda     achievementYOffset 
                     jsr      syncPrintStrd                ;Print5Strd 
-                    _ZERO_VECTOR_BEAM  
+;                    _ZERO_VECTOR_BEAM  
                     ldd      #$b0a0 +$2000 
                     ldu      ,y++ 
                     adda     achievementYOffset 
@@ -2608,7 +2636,7 @@ continueAchievements
                     stb      <VIA_t1_cnt_lo 
 ;                    MY_MOVE_TO_A_END  
                     jsr      SMVB_drawSmart 
-                    _ZERO_VECTOR_BEAM  
+ ;;                   _ZERO_VECTOR_BEAM  
 ; IRQ_TO_0_T1 ; drawing needs
 noAchievementReached 
                     jmp      displayAchievementLoop 
@@ -2630,6 +2658,10 @@ REPLACE_1_2_fromGameOver_varFrom0_11
 ; bit == 1 = not pressed
 ; a = xxxx 0000
 ;          4321 - buttons
+
+
+
+ if ADDITIONAL_INPUT = 1
 getButtonState:                                           ;#isfunction  
 ; save last states, and shift the old current one bit
 ; query buttons from psg
@@ -2647,6 +2679,69 @@ getButtonState:                                           ;#isfunction
                     STB      <VIA_port_b                  ; VIA Port B = 81, mux disabled, RAMP disabled, BC1/BDIR = 00 (PSG inactive) 
                     LDB      #$FF 
                     STB      <VIA_DDR_a                   ;DDR A to output 
+; query done, in A current button state directly from psg
+
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq defaultInput_B ; beq
+
+
+;;;;;;;;;;;;;;;;;
+; conversion start
+;;;;;;;;;;;;;;;;;
+
+; insert x,y movement for button 2,3
+; map 2+3 to button 3 (pause)
+; map button 1 to button 2 bomb
+
+ clrb
+ bita #2
+ beq goleft
+ bita #4
+ beq goRight
+ bra JoyDone_b
+
+
+goleft
+                    ldb      #-10 
+ bra JoyDone_b
+goRight
+                    ldb      #10 
+JoyDone_b
+
+                    stb      Vec_Joy_1_X 
+ negb
+                    stb      Vec_Joy_1_Y 
+ tfr a,b
+ ora #1+2+4 ; delete button 1+2+3
+ bitb #1 ; button 1
+ bne noSuperbomb_b
+ anda #$f-2; add superbomb
+noSuperbomb_b
+ andb #2+4
+ bne noPauseMode_b 
+ anda #$f-4  ; add pause mode
+noPauseMode_b
+;;;;;;;;;;;;;;;;;
+; conversion end
+;;;;;;;;;;;;;;;;;
+
+                    ldb      current_button_state 
+                    stb      last_button_state 
+                    lslb     
+                    anda     #$f                          ; only joystick 1 button 4
+                    bita     #$8;8 
+                    bne      noButtonPressed_lt 
+                    incb     
+noButtonPressed_lt: 
+                    stb      current_button_state 
+                    andb     #3 
+                    rts      
+
+
+
+
+defaultInput_B
                     ldb      current_button_state 
                     stb      last_button_state 
                     lslb     
@@ -2658,6 +2753,44 @@ noButtonPressed:
                     stb      current_button_state 
                     andb     #3 
                     rts      
+
+
+
+
+ else
+
+getButtonState:                                           ;#isfunction  
+; save last states, and shift the old current one bit
+; query buttons from psg
+                    LDA      #$0E                         ;Sound chip register 0E to port A 
+                    STA      <VIA_port_a 
+                    LDD      #$9981                       ;sound BDIR on, BC1 on, mux off 
+                    sta      <VIA_port_b                  ; VIA Port B = 99, mux disabled, RAMP disabled, BC1/BDIR = 11 (Latch address) 
+                    NOP                                   ;pause 
+                    STB      <VIA_port_b                  ; VIA Port B = 81, mux disabled, RAMP disabled, BC1/BDIR = 00 (PSG inactive) 
+                    CLR      <VIA_DDR_a                   ;DDR A to input 
+                    LDD      #$8981                       ;sound BDIR off, BC1 on, mux off 
+                    STA      <VIA_port_b                  ; VIA Port B = 89, mux disabled, RAMP disabled, BC1/BDIR = 01 (PSG Read) 
+                    NOP                                   ;pause 
+                    LDA      <VIA_port_a                  ;Read buttons 
+                    STB      <VIA_port_b                  ; VIA Port B = 81, mux disabled, RAMP disabled, BC1/BDIR = 00 (PSG inactive) 
+                    LDB      #$FF 
+                    STB      <VIA_DDR_a                   ;DDR A to output 
+; query done, in A current button state directly from psg
+                    ldb      current_button_state 
+                    stb      last_button_state 
+                    lslb     
+                    anda     #$f                          ; only joystick 1 
+                    cmpa     #$0f 
+                    beq      noButtonPressed 
+                    incb     
+noButtonPressed: 
+                    stb      current_button_state 
+                    andb     #3 
+                    rts      
+ endif
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; word in D
@@ -3266,6 +3399,45 @@ chandleNoise
                     include  "objectEnemyBank1.asm"
                     include  "titlePic.asm"
                     include  "shop.asm"
+
+
+ if  VECFEVER = 1 
+
+
+Saucer 
+                    db       $0A, $01, -$3A, hi(SMVB_startDraw_single), lo(SMVB_startDraw_single) 
+                    db       -$0A, $01, -$3A, hi(SMVB_continue7_single), lo(SMVB_continue7_single) 
+                    db       -$21, $01, -$3D 
+                    db       -$29, $01, -$39 
+                    db       $15, $01, -$47 
+                    db       -$33, $01, -$42 
+                    db       -$4D, $01, $4E 
+                    db       -$19, $01, $2C 
+                    db       -$15, $01, $2A, hi(SMVB_continue7_single), lo(SMVB_continue7_single) 
+                    db       $0A, $01, $37 
+                    db       -$18, $01, $39 
+                    db       -$05, $01, $25 
+                    db       $05, $01, $25 
+                    db       $18, $01, $39 
+                    db       -$0A, $01, $37 
+                    db       $15, $01, $2A, hi(SMVB_continue7_single), lo(SMVB_continue7_single) 
+                    db       $19, $01, $2C 
+                    db       $4D, $01, $4E 
+                    db       $33, $01, -$42 
+                    db       -$15, $01, -$47 
+                    db       $29, $01, -$39 
+                    db       $21, $01, -$3D 
+                    db       -$29, $01, -$70, hi(SMVB_startMove_double), lo(SMVB_startMove_double) 
+                    db       -$14, $01, $64, hi(SMVB_startDraw_single), lo(SMVB_startDraw_single) 
+                    db       $00, $01, $42, hi(SMVB_continue_double), lo(SMVB_continue_double) 
+                    db       $14, $01, $64, hi(SMVB_continue_single), lo(SMVB_continue_single) 
+; only for very cranky?
+;                    db       -$29, $01, -$10, hi(SMVB_startMove_single), lo(SMVB_startMove_single) 
+                    db       $40, $00, $00, hi(SMVB_lastDraw_rts), lo(SMVB_lastDraw_rts) 
+ endif
+
+
+
  if  VECFEVER = 1 
 MARKK_8000                                                ;        actually this is 7ef0 
                     org      $7ff0 

@@ -68,6 +68,50 @@ REPLACE_1_2_backFromHighScoreEdit_varFrom0_1
 
 notFinishedHSEdit 
                     JSR      Read_Btns                    ; get button status 
+
+
+ if ADDITIONAL_INPUT = 1
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq do_hsedit_normalButtons
+ ; remap buttons
+
+ ; remap x movement (button 2+3)
+
+ clrb
+ lda      $C811                        ; button pressed - any 
+ bita #2
+ bne goleft_hse
+ bita #4
+ bne goRight_hse
+ bra JoyDone_b_hse
+goleft_hse
+                    ldb      #-10 
+ bra JoyDone_b_hse
+goRight_hse
+                    ldb      #10 
+JoyDone_b_hse
+
+                    stb      Vec_Joy_1_X 
+ ; clr button 2,3
+ anda #$f-2-4
+ bita #1
+ beq noButton1_hse
+ ora #4
+
+noButton1_hse
+; clr button 1
+ anda #$f-1
+ sta $c811
+
+ ; map button 1 to button 3
+ ; delete button 1
+
+
+do_hsedit_normalButtons
+ endif
+
+
                     ldb      $C811                        ; button pressed - any 
                     andb     #1                           ; is button 1 
                     beq      notButton1HSE 
@@ -106,9 +150,21 @@ noHSShoot
 ;....
                     tst      inEdit 
                     bne      mh_inputXDoneComplete        ; no movement while shot is on its way 
+
+
+ if ADDITIONAL_INPUT = 1
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq do_hsedit_normalButtons2
+ ; remap buttons
+ bra processJoyButtons
+ endif
+
+do_hsedit_normalButtons2
 REPLACE_1_2_queryJoystick_varFromIRQ0_2 
                     ldx      #0                           ; queryJoystick 
                     jsr      jsrBank0X 
+processJoyButtons
                     LDA      Vec_Joy_1_X                  ; load joystick 1 position X to A 
                     BEQ      mh_inputXDoneComplete        ; no x joystick input available 
                     BMI      mh_inputLeft                 ; joystick moved to left 

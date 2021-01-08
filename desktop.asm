@@ -275,6 +275,8 @@ stageOk
 ; .....................................................
 ;
 stagesPointer 
+
+
                     dw       doStageSwitchLightsOn 
                     dw       doStageManComes 
                     dw       doStageScroller 

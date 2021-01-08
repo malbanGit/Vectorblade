@@ -145,8 +145,8 @@ beQuiet
                     std      sfx_pointer_1 
                     CLR      Vec_Music_Flag               ; no music is playing ->0 (is placed in rottist! 
                     JSR      Init_Music_Buf               ; shadow regs 
-                    JSR      Do_Sound                     ; ROM function that does the sound playing, here used to clear all regs 
-                    rts      
+                    jmp      Do_Sound                     ; ROM function that does the sound playing, here used to clear all regs 
+;                    rts      
 
 exitOptions 
                     lda      difficulty 
@@ -196,6 +196,25 @@ noJoy
                     JSR      Read_Btns                    ; get button status 
                     lda      $C811 
                     lbeq     noButtonPressedOptions 
+
+ if ADDITIONAL_INPUT = 1
+ bita #2
+ bne goleft_O
+ bita #4
+ bne goRight_O
+ bra JoyDone_O1
+goleft_O
+                    ldb      #-10 
+ bra JoyDone_O
+goRight_O
+                    ldb      #10 
+JoyDone_O
+ endif
+                    stb      Vec_Joy_1_Y 
+; do not reakt on buttons that we just mapped
+ jmp noButtonPressedOptions_buttonwaspressed
+
+JoyDone_O1
                     bita     #1 
                     beq      noOptionHelp 
 REPLACE_1_2_showOptionHelp_varFromIRQ0_1 
@@ -282,18 +301,31 @@ noButtonPressedOptions
                                                           ; jsr Joy_Digital 
                     jsr      JoyDigitalHorizontal00 
                     jsr      JoyDigitalVertical00 
+noButtonPressedOptions_buttonwaspressed 
                     lda      Vec_Joy_1_Y 
                     beq      noChangeSelPos 
                     bmi      selPosAdvance 
                     lda      optionDir 
                     bmi      noChangeSelPos2 
                     lda      selectedOption 
+ if ADDITIONAL_INPUT = 1
+                    beq      toggleInput 
+ else
                     beq      noChangeSelPos 
+ endif
+
+
                     dec      selectedOption 
                     lda      #-1 
                     sta      optionDir 
                     bra      noChangeSelPos2 
+ if ADDITIONAL_INPUT = 1
 
+toggleInput
+REPLACE_1_2_toggleInputOption_varFromIRQ0_1 
+                    ldx      #0                           ;toggleInputOption 
+                    jmp      jmpBankIRQ0Shift 
+ endif
 doMode 
                     ldb      difficulty 
                     bpl      selectHardcore 
@@ -570,6 +602,31 @@ REPLACE_1_2_playAKSMusic_varFromIRQ1_1
                     JSR      Read_Btns                    ; get button status 
                     tst      buttonWait 
                     bne      doNotStartGame 
+
+
+ if ADDITIONAL_INPUT = 1
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq defaultTitleInput
+
+                    ldb      $C811                        ; button pressed - any 
+                    andb     #$f                          ; is button 1 
+                    beq      doNotStartGame 
+
+ cmpb #1
+ lbeq doStartGame
+ cmpb #2
+ lbeq doOptions
+ cmpb #4
+ lbeq HighScoreTest_Start
+ cmpb #8
+ lbeq doAchiements
+
+
+defaultTitleInput
+ endif
+
+
                     lda      joystickDir 
                     beq      doNotStartGame2 
                     ldb      $C811                        ; button pressed - any 
@@ -604,7 +661,7 @@ doNotStartGame
 REPLACE_1_2_oneVBTitleStep_varFromIRQ0_1 
                     ldx      #0                           ; oneVBTitleStep 
                     jsr      jsrBank0_fromBank2_Shift 
-                    bra      title_0_0 
+                    jmp      title_0_0 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Button 1-4
@@ -618,6 +675,125 @@ REPLACE_1_2_oneVBTitleStep_varFromIRQ0_1
 ; bit == 1 = not pressed
 ; a = xxxx 0000
 ;          4321 - buttons
+ if ADDITIONAL_INPUT = 1
+getButtonState:                                           ;#isfunction  
+; save last states, and shift the old current one bit
+; query buttons from psg
+                    LDA      #$0E                         ;Sound chip register 0E to port A 
+                    STA      <VIA_port_a 
+                    LDD      #$9981                       ;sound BDIR on, BC1 on, mux off 
+                    sta      <VIA_port_b                  ; VIA Port B = 99, mux disabled, RAMP disabled, BC1/BDIR = 11 (Latch address) 
+                    NOP                                   ;pause 
+                    STB      <VIA_port_b                  ; VIA Port B = 81, mux disabled, RAMP disabled, BC1/BDIR = 00 (PSG inactive) 
+                    CLR      <VIA_DDR_a                   ;DDR A to input 
+                    LDD      #$8981                       ;sound BDIR off, BC1 on, mux off 
+                    STA      <VIA_port_b                  ; VIA Port B = 89, mux disabled, RAMP disabled, BC1/BDIR = 01 (PSG Read) 
+                    NOP                                   ;pause 
+                    LDA      <VIA_port_a                  ;Read buttons 
+                    STB      <VIA_port_b                  ; VIA Port B = 81, mux disabled, RAMP disabled, BC1/BDIR = 00 (PSG inactive) 
+                    LDB      #$FF 
+                    STB      <VIA_DDR_a                   ;DDR A to output 
+; query done, in A current button state directly from psg
+ if  RECORD_GAME_DATA = 1 
+                    tst      saveState 
+                    bne      loadButtonData 
+                    tfr      a,b 
+                    stb      buttonTmp 
+REPLACE_1_2_putOneInputByte_varFromIRQ0_1 
+                    ldx      #0                           ;putOneInputByte 
+                    jsr      jsrBank0_fromBank2_T1 
+                    lda      buttonTmp 
+                    bra      contButton 
+
+loadButtonData 
+REPLACE_1_2_getOneInputByte_varFromIRQ0_1 
+                    ldx      #0                           ;getOneInputByte 
+                    jsr      jsrBank0_fromBank2_T1 
+                    tfr      b,a 
+contButton 
+ endif  
+
+
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq defaultInput_B ; beq
+
+
+;;;;;;;;;;;;;;;;;
+; conversion start
+;;;;;;;;;;;;;;;;;
+
+; insert x,y movement for button 2,3
+; map 2+3 to button 3 (pause)
+; map button 1 to button 2 bomb
+
+ clrb
+ bita #2
+ beq goleft
+ bita #4
+ beq goRight
+ bra JoyDone_b
+
+
+goleft
+                    ldb      #-10 
+ bra JoyDone_b
+goRight
+                    ldb      #10 
+JoyDone_b
+
+                    stb      Vec_Joy_1_X 
+ negb
+                    stb      Vec_Joy_1_Y 
+ tfr a,b
+ ora #1+2+4 ; delete button 1+2+3
+ bitb #1 ; button 1
+ bne noSuperbomb_b
+ anda #$f-2; add superbomb
+noSuperbomb_b
+ andb #2+4+8+1 ; all four buttons
+ bne noPauseMode_b 
+ anda #$f-4  ; add pause mode
+noPauseMode_b
+;;;;;;;;;;;;;;;;;
+; conversion end
+;;;;;;;;;;;;;;;;;
+
+                    ldb      current_button_state 
+                    stb      last_button_state 
+                    lslb     
+                    anda     #$f                          ; only joystick 1 button 4
+                    bita     #$8;8 
+                    bne      noButtonPressed
+                    incb     
+ bra  noButtonPressed
+
+defaultInput_B
+                    ldb      current_button_state 
+                    stb      last_button_state 
+                    lslb     
+                    anda     #$f                          ; only joystick 1 
+                    cmpa     #$0f 
+
+                    beq      noButtonPressed 
+                    incb     
+noButtonPressed: 
+                    stb      current_button_state 
+                    andb     #3 
+                    rts      
+
+
+
+
+
+
+
+
+
+
+
+ else
+
 getButtonState:                                           ;#isfunction  
 ; save last states, and shift the old current one bit
 ; query buttons from psg
@@ -665,12 +841,34 @@ noButtonPressed:
                     stb      current_button_state 
                     andb     #3 
                     rts      
+ endif
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 JoyDigitalHorizontal00                                    ;#isfunction  
 Joy_Digital_horizontal_0_0 
+ if ADDITIONAL_INPUT = 1
+
+
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ beq defaultInput_J ; beq
+ 
+
+ ldb current_button_state
+ pshs b
+ jsr getButtonState
+ puls b
+ stb current_button_state
+
+
+
+ bra contInput_J
+defaultInput_J
+ endif
                     QUERY_JOYSTICK_HORIZINTAL  
+contInput_J
  if  RECORD_GAME_DATA = 1 
                     tst      saveState 
                     bne      loadJoyData 
@@ -882,9 +1080,9 @@ perfectChallengeResult
                     std      FW_BEHAVIOUR, u 
                     ldd      #$0000 
                     std      FW_Y_POS, U                  ; current POS 16 bit 
-                    ldd      #0 
+;                    ldd      #0 
                     std      FW_X_POS, U                  ; current POS 
-                    clra     
+;                    clra     
                     RANDOM_B  
                     orb      #%00100000 
                     std      FW_Y_VEL, u 
@@ -1742,6 +1940,23 @@ playerShotsDoneMain
                     clr      tacScan 
                     ldb      isDemoMode 
                     beq      noDemo 
+
+; a button press "breaks" demo
+
+ if ADDITIONAL_INPUT = 1
+ ldy Vec_Joy_1_X ; this is so that in "button only" mode, the current values are saved!
+                    JSR      getButtonState               ; get button status 
+ sty Vec_Joy_1_X
+ else
+                    JSR      getButtonState               ; get button status 
+ endif
+
+
+                    anda     #%00001111 
+                    cmpa     #%00001111 
+                    lbne     main00 
+
+
                     ldd      Vec_Loop_Count 
                     cmpd     #50*150 
                     lbgt     main00                       ; restart VB 
@@ -1757,18 +1972,14 @@ noDemoMessage
                     bpl      demoLeft 
 demoRight 
                     lda      #10 
-                    sta      Vec_Joy_1_X 
-                    bra      noDirChangeDemo 
+                    bra      storeA_demo 
 
 demoLeft 
                     lda      #-10 
+storeA_demo
                     sta      Vec_Joy_1_X 
+
 noDirChangeDemo 
-; a button press "breaks" demo
-                    JSR      getButtonState               ; get button status 
-                    anda     #%00001111 
-                    cmpa     #%00001111 
-                    lbne     main00 
 ; get joystivk
 ; todo change direction each "xx" seconds
 ; check vecloop count if = XXs -> exit demo
@@ -1792,6 +2003,8 @@ noAdjustTacScan_dem
                     bra      doAutoFire 
 
 noDemo 
+
+
                     ldb      Vec_Loop_Count+1 
                     andb     #1 
                     beq      noOddRound_m0 
@@ -1821,12 +2034,24 @@ noAdjustTacScan
                     bra      oddEvenDoneMain0_m 
 
 noOddRound_m0 
+;                    JSR      getButtonState               ; get button status 
+ if ADDITIONAL_INPUT = 1
+ ldy Vec_Joy_1_X ; this is so that in "button only" mode, the current values are saved!
                     JSR      getButtonState               ; get button status 
+ sty Vec_Joy_1_X
+ else
+                    JSR      getButtonState               ; get button status 
+ endif
+
+
+
+
                     bita     #4                           ; button 3 pause 
                     lbeq     pause_0_0 
-                    bita     #2                           ; button 3 pause 
+                    bita     #2                           ; button 2 bomb 
                     lbeq     executeSmartBomb 
 ; new player shot
+continueFireButton
                     lda      diverseFlags 
                     anda     #BIT_FLAG_AUTOFIRE 
                     beq      normalFire 
@@ -2445,9 +2670,9 @@ REPLACE_1_2_doymsound100_varFromIRQ1_100
                     std      FW_BEHAVIOUR, u 
                     ldd      #$9000 
                     std      FW_Y_POS, U                  ; current POS 16 bit 
-                    ldd      #0 
+                    lda      #0 
                     std      FW_X_POS, U                  ; current POS 
-                    clra     
+;                    clra     
                     RANDOM_B  
                     orb      #%00100000 
                     std      FW_Y_VEL, u 
@@ -2522,7 +2747,7 @@ _ZERO_VECTOR_BEAM3  macro
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 _ZERO_VECTOR_BEAM2  macro    
-                    lda      #%00110000 
+                    ldd      #%00110000 
                     sta      <VIA_shift_reg 
                     LDb      #$CC                         ; BLANK false, ZERO true 
                     STB      <VIA_cntl                    ;/BLANK low and /ZERO low 
@@ -3451,8 +3676,9 @@ doSecrets
                     pshs     a 
 secretLoop 
                     lda      achievements+4 
-                    beq      noSecretsYet 
+; V1.07 corrected, was after beq
                     anda     #%00000111 
+                    beq      noSecretsYet 
                     cmpa     ,s 
                     beq      secretLoopDone 
                     lda      ,s 

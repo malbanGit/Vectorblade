@@ -20,6 +20,7 @@ queryJoystick:                                            ;#isfunction
                     rts      
 
 ;***************************************************************************
+bank0WaitRecal
 Wait_Recal_noShift 
                     LDX      Vec_Loop_Count               ;Increment loop counter 
                     LEAX     1,X 
@@ -1834,6 +1835,7 @@ drawFighterDoneShort
                     stB      VIA_t1_cnt_lo 
                     ldd      #0 
                     std      <VIA_port_b 
+
                     rts      
 
 testNext1 
@@ -3139,6 +3141,40 @@ resetHighScoreStart
                     db       "VTK", $00,$00,$02,$00, $00
                     db       "ALX", $00,$00,$01,$00, $00
 resetHighScoreEnd 
+
+
+
+ if ADDITIONAL_INPUT = 1
+toggleInputOption
+
+
+ ldb additionalFlags
+ bitb #BIT_INPUT_VARIANT
+ beq switchToButtons
+ andb #$f-BIT_INPUT_VARIANT
+ stb additionalFlags
+ jsr showJoystickMessage
+ bra doneHere11
+
+switchToButtons
+ orb #BIT_INPUT_VARIANT
+ stb additionalFlags
+ jsr showButtonMessage
+
+doneHere11
+
+ jsr saveBlockOnChange 
+
+
+REPLACE_1_2_noChangeSelPos_varFrom0_3                          ;  bank 2 replace 
+                    ldx      #0                           ; noChangeSelPos 
+                    jmp      jmpBank2_from0 
+
+ endif
+
+
+
+
  if  VECFEVER = 1 
  else  
 ; game save
@@ -3518,3 +3554,6 @@ jingledata:
 extraDATENd 
                     db       0 
  endif  
+
+
+

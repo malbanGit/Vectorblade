@@ -473,7 +473,7 @@ noLatch
 angleOk 
                     std      angleUse 
                     dec      cheeseCounter 
-                    bne      nextCheese 
+                    lbne      nextCheese 
                     jmp      extraLoop 
 
                     direct   $d0 

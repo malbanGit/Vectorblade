@@ -223,6 +223,7 @@ calibrationValue50  ds       1                            ; boss
 gameScale           ds       1 
 shopAllowFlags      ds       1                            ; can be calculated from achievements and in game secrets! 
 ; saved bits
+BIT_INPUT_VARIANT  =         %00000100 ; 0 = default, ; 1 =  1,2 move, 3 bomb, 4 fire, joy = pause
 BIT_RAN_CALIBRATION  =       %00000010 
 BIT_BUZZ_NOBUZZ     =        %00000001 
 ; lowest 4 bits are saved

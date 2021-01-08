@@ -772,12 +772,12 @@ showResetMessage
 svg71String         db       "SAVE GAME!",$80
 svg72String         db       "DO YOU WANT TO SAVE",$80
 svg73String         db       "THE CURRENT GAME?",$80
-svg74String         db       "(BUTTON 3 YES, BUTTON 4 NO)",$80
+;svg74String         db       "(BUTTON 3 YES, BUTTON 4 NO)",$80
 displaySaveMessage
                     dw       $6090, svg71String
                     dw       $4090, svg72String
                     dw       $3090, svg73String
-                    dw       $1090, svg74String
+                    dw       $1090, rsm77String;svg74String
                     dw       0
 showSaveMessage:
                     ldy      #displaySaveMessage
@@ -792,14 +792,14 @@ ldg72String         db       "DO YOU WANT TO LOAD",$80
 ldg73String         db       "THE SAVED GAME?",$80
 ldg74String         db       "NO HIGH SCORE POSSIBLE!",$80
 ldg75String         db       "NO ACHIEVEMENTS POSSIBLE!",$80
-ldg76String         db       "(BUTTON 3 YES, BUTTON 4 NO)",$80
+;ldg76String         db       "(BUTTON 3 YES, BUTTON 4 NO)",$80
 displayLoadMessage
                     dw       $6090, ldg71String
                     dw       $4090, ldg72String
                     dw       $3090, ldg73String
                     dw       $1090, ldg74String
                     dw       $0090, ldg75String
-                    dw       $e090, ldg76String
+                    dw       $e090, rsm77String
                     dw       0
 showLoadMessage
                     ldy      #displayLoadMessage
@@ -832,3 +832,37 @@ showNoMessage
                     ldd      #$f850
                     std      Vec_Text_HW
                     rts
+
+
+
+
+
+inputJoystick1          db       "INPUT:",$80
+inputJoystick2          db       "JOYSTICK",$80
+inputJoystick3          db       "BUTTONS",$80
+
+
+inputJoystickMessage
+                    dw       $6090, inputJoystick1
+                    dw       $4090, inputJoystick2
+                    dw       0
+showJoystickMessage
+                    ldy      #inputJoystickMessage
+showMessgCont
+                    jsr      showMESSAGE
+; correct highscore size
+                    ldd      #$f850
+                    std      Vec_Text_HW
+                    rts
+
+inputButtonMessage
+                    dw       $6090, inputJoystick1
+                    dw       $4090, inputJoystick3
+                    dw       0
+showButtonMessage
+                    ldy      #inputButtonMessage
+ bra showMessgCont
+
+
+
+

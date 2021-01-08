@@ -145,7 +145,7 @@ initBonus                                                 ;#isfunction
                     RANDOM_A2  
  if  TESTING = 1 
 ; bmi noChange
-; lda #BONUS_MINESTORM_COMPARE
+; lda #BONUS_DRUNKEN_COMPARE;BONUS_MINESTORM_COMPARE
 ; bra noChange_2
 noChange 
 ; lda #BONUS_DRUNKEN_COMPARE

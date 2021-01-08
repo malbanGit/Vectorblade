@@ -1,20 +1,104 @@
+; done config up down not workin
+; done drunk mode not working
+; done crash in demo level 95 -> main1 was over the 7ff0 range, UFO crashed in draw!
+; done pause not good on left/right
+; done achievement display "tick is wrobgly placed"
+; done fire button unrespronsive
+; done switch on / off
+; done level 24/94
+; done pause
+; done High Score entry
+; done Asteroids
+; done demo mode "remap"
+; done high score buttons 
+; done Achievements
+; done desktop 
+; done Shop
+; done game
+
+
+;VecFever no "no text" ib secrets
+
+
+
+
+
+; Options do not work with buttons only since we need both x/y movement (and Button)
+
 ; TODO:
 ;und zwar ist mir bei mir und in bildern/videos anderer aufgefallen, dass das bild leicht nach links verschoben ist, 
 ;zumindest aber das quadrat in der kalibration
 
 ;
-;                    DB       "VERSION 1.00"              ; Cartridges 1-30
-;                    DB       "VERSION 1.01"              ; Cartridges 1-31 - "all" fixed: Immunity 2 games by wheel, was ovewritten bei level rollover
-;                    DB       "VERSION 1.02"              ; fixed: Immunity setting could overwrite multiplyer, that caused the mulitplyer to
-                                                          ; be "0" whiech effectively was 256 -> huge scores! 
-;                    DB       "VERSION 1.03"              ; fixed: bug in boss 4, gamescale positive -> endless loop
-                                                          ; fixed: pause mode glitch, shots can go thru shields
-                                                          ; fixed:in dodger was potential to get the multiplyers mixed up
-                                                          ; added version number to title
-;                    DB       "VERSION 1.04"              ; fixed: debounce of button 4 upon entering highscore from desktop upon first entry
-;                    DB       "VERSION 1.05"              ; fixed: added a tiny bit of delay in the FLASH write routine, and game save RAM read routine
-;                    DB       "VERSION 1.06"              ; fixed: intensity levels to work on "straneg" vectrex (CSR)
+;                    DB       "VERSION 1.00"            ; Cartridges 1-30
+;                    DB       "VERSION 1.01"            ; Cartridges 1-31 - "all" fixed: Immunity 2 games by wheel, was ovewritten bei level rollover
+;                    DB       "VERSION 1.02"            ; fixed: Immunity setting could overwrite multiplyer, that caused the mulitplyer to
+                                                        ; be "0" whiech effectively was 256 -> huge scores! 
+;                    DB       "VERSION 1.03"            ; fixed: bug in boss 4, gamescale positive -> endless loop
+                                                        ; fixed: pause mode glitch, shots can go thru shields
+                                                        ; fixed:in dodger was potential to get the multiplyers mixed up
+                                                        ; added version number to title
+;                    DB       "VERSION 1.04"            ; fixed: debounce of button 4 upon entering highscore from desktop upon first entry
+;                    DB       "VERSION 1.05"            ; fixed: added a tiny bit of delay in the FLASH write routine, and game save RAM read routine
+;                    DB       "VERSION 1.06"            ; fixed: intensity levels to work on "strange" vectrex (CSR)
+;                    DB       "VERSION 1.07"            ; fixed: player dead and level clear at the same time, leads to endless loop
+                                                        ; fixed: a small bug in secret display, if an achievement in the same byte had been gotten
+                                                        ;        but no secret yet, a "no secret yet" message was not displayed!
+                                                        ; changed: each level allows now at leat ONE attack pattern
+                                                        ;          this way it is not possible to completely ignore enemies in mode easy,
+                                                        ;          when positioned "correctly"
+                                                        ; added: additional "INPUT" option, hidden (due to not having any space left
+                                                        ;        in the config menu go to the top, going pushing up, than "toggles" the input method
+                                                        ;        toggle between joystick (default, not changed) and buttons, button mapping as follows
+                                                        ; button in title:
+                                                        ; 1 Start game
+                                                        ; 2 options
+                                                        ; 3 high score
+                                                        ; 4 achievement
+                                                        ; help not available
+                                                        ;
+                                                        ; button minestorm
+                                                        ; 1 throttle speed
+                                                        ; 4 increase speed
+                                                        ; button 2/3 x movements
+                                                        ; no help available
+                                                        ;
+                                                        ; button highscore edit
+                                                        ; 1 keep initial
+                                                        ; 4 shoot
+                                                        ; button 2/3 letter scrolling
+                                                        ; no help available
+                                                        ;
+                                                        ; button highscore shown
+                                                        ; 1 help
+                                                        ; 2 switch mode
+                                                        ; 4 exit
+                                                        ;
+                                                        ; button achievments
+                                                        ; 1 help
+                                                        ; 2/3 scroll
+                                                        ; 4 exit
+                                                        ;
+                                                        ; button config
+                                                        ; 1 help
+                                                        ; 2/3 scroll up/down
+                                                        ; 4 execute
+                                                        ; you can not do horizontal settings (level edit)
+                                                        ; scroll to the top/top - to toggle input method (not visible)
+                                                        ;
+                                                        ; buttons in game
+                                                        ; button 1 super bomb
+                                                        ; button 2/3 x movement
+                                                        ; button 4 shot
+                                                        ; all 4 buttons pressed = pause
+                                                        ;
+                                                        ; buttons in pause
+                                                        ; button 1 help
+                                                        ; button 2/3 y movement
+                                                        ; button 4 exit
 
+
+ADDITIONAL_INPUT = 1 ; added with v1.07
 
 ;
 TESTING             =        0                            ; switch between usiong TEST/Debug values (defined below) 
@@ -125,7 +209,7 @@ DRUNKEN_TIME        =        127                          ; positive - or code f
 ;...................
 ;
  if  TESTING = 1 
-START_LEVEL         =        76                           ;4 ;23;76;24 ;79; SHIELD 
+START_LEVEL         =        56                           ;4 ;23;76;24 ;79; SHIELD 
 MAX_LEVEL_SELECT_ALLOWED  =  1 
 DEFAULT_DIFFICULTY  =        EASY 
 TRY_MAJOR_HAVOC     =        0                            ; if defined, after Minestorm the major havoc part is invoked 
@@ -154,7 +238,7 @@ AUTO_FIRE           =        1
 MANY_MEGA           =        0                            ; if defined - MANY mega aliens will appear (if possible) 
 MINESTORM_INVINCIBLE  =      0 
 ENEMY_NO_SHOOTING   =        0 
-UNDYING             =        1 
+UNDYING             =        0 
 NO_ATTACK_PATTERN   =        0 
 NO_WOBBLE           =        0 
 ENEMY_UNDYING       =        0 
@@ -163,7 +247,7 @@ BUGS_DONT_MOVE      =        0
 BLINKING_SCOOPY_FIRE  =      0                            ; only as test implemented for 4 shots, this draw left/right only each alternate frame 
 SCOOPIE_DONT_DIE    =        0 
 WARP_FAILURE_BORDER  =       220 
-PLAYER_START_LIVES  =        3 
+PLAYER_START_LIVES  =        1 
 START_POWER         =        0                            ;0 ;5 
 INGAMESECRETS       =        0                            ;0xff ;SECRET_3_FIFTY ; ff also invokes biggest loss! 
 SUPER_DIAMOND_BORDER  =      50 
@@ -245,7 +329,7 @@ NONE                =        0
                     DB       "VECTORBLADE", $80           ; some game information, ending with $80
 version
                     DB       $Fb, $40, -$00, -$40          ; hight, width, rel y, rel x (from 0,0) 
-                    DB       "VERSION 1.06",$80               ; some game information
+                    DB       "VERSION 1.07",$80               ; some game information
 ; if  VECFEVER = 1
 ;                    DB       $F8, $50, -$00, -$50           ; hight, width, rel y, rel x (from 0,0)
 ;                    DB       "GOLD 5 (VF)", $80            ; some game information, ending with $80
