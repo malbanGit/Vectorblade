@@ -69,7 +69,7 @@
 ;                    DB       "VERSION 1.08"            ; changed: switch off joystick on desktop in button mode
                                                         ; changed: icon of "autofire" slightly to make it easier to distinguish with "shot 1"
 ;                    DB       "VERSION 1.09"            ; fixed: LIVE -> LIFE
-                                                        ; changed: icon of "autofire" slightly to make it easier to distinguish with "shot 1"
+                                                        ; fixed: debounce of button 4 in joystick mode, to enter highscore
 
 
 
