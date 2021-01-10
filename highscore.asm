@@ -7,6 +7,19 @@ mov_y               =        _tmpY
 mov_x               =        _tmpX                        ; _tmpY+1 
 ;
 initShowHighScore 
+ if ADDITIONAL_INPUT = 1
+
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ bne noHighscoreDebounce ; beq
+                    JSR      getButtonState               ; get button status 
+                    anda     #%1111                       ; button 4 unpause 
+                    cmpa     #%1111 
+                    bne      initShowHighScore 
+noHighscoreDebounce
+ endif
+
+
                     clra     
                     sta      tmpButtonMode 
                     ldu      #highScoreBlock 

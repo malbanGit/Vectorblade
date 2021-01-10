@@ -2721,7 +2721,7 @@ HighScoreTest_Start
  stb current_button_state
 REPLACE_1_2_showHighscoreMusic_varFromIRQ1_1 
 
-                    ldx      #0                           ; showHighscoreMusic HighScoreTest 
+                    ldx      #0                           ; showHighscoreMusic  
                     jsr      jsrBank1_fromBank2_T1 
                     jmp      fromGameOver 
 

@@ -1,33 +1,3 @@
-; done config up down not workin
-; done drunk mode not working
-; done crash in demo level 95 -> main1 was over the 7ff0 range, UFO crashed in draw!
-; done pause not good on left/right
-; done achievement display "tick is wrobgly placed"
-; done fire button unrespronsive
-; done switch on / off
-; done level 24/94
-; done pause
-; done High Score entry
-; done Asteroids
-; done demo mode "remap"
-; done high score buttons 
-; done Achievements
-; done desktop 
-; done Shop
-; done game
-
-
-;VecFever no "no text" ib secrets
-
-
-
-
-
-; Options do not work with buttons only since we need both x/y movement (and Button)
-
-; TODO:
-;und zwar ist mir bei mir und in bildern/videos anderer aufgefallen, dass das bild leicht nach links verschoben ist, 
-;zumindest aber das quadrat in der kalibration
 
 ;
 ;                    DB       "VERSION 1.00"            ; Cartridges 1-30
@@ -98,6 +68,8 @@
                                                         ; button 4 exit
 ;                    DB       "VERSION 1.08"            ; changed: switch off joystick on desktop in button mode
                                                         ; changed: icon of "autofire" slightly to make it easier to distinguish with "shot 1"
+;                    DB       "VERSION 1.09"            ; fixed: LIVE -> LIFE
+                                                        ; changed: icon of "autofire" slightly to make it easier to distinguish with "shot 1"
 
 
 
@@ -161,7 +133,7 @@ CORRECT_START_LEVEL  =       0                            ; if 1, than level 25 
 ; ShadowRAM and copy to ROM feature (upper 16k)
 ; The V4E structure lies in Bank 1 ($8030) - followed by options and the highscore table(s).
 ;
-VECFEVER            =        1 
+VECFEVER            =        0 
 ;
 ;VECFEVER_FAKE = 1 ; don't execute any RAM/ROM copy for persistency
 ;
@@ -332,7 +304,7 @@ NONE                =        0
                     DB       "VECTORBLADE", $80           ; some game information, ending with $80
 version
                     DB       $Fb, $40, -$00, -$40          ; hight, width, rel y, rel x (from 0,0) 
-                    DB       "VERSION 1.08",$80               ; some game information
+                    DB       "VERSION 1.09",$80               ; some game information
 ; if  VECFEVER = 1
 ;                    DB       $F8, $50, -$00, -$50           ; hight, width, rel y, rel x (from 0,0)
 ;                    DB       "GOLD 5 (VF)", $80            ; some game information, ending with $80

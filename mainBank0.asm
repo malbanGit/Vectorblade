@@ -1971,7 +1971,7 @@ notLastLive
                     rts      
 
 lastLiveWarning 
-                    db       "DANGER! LAST LIVE ACTIVE!", $80 ;
+                    db       "DANGER! LAST LIFE ACTIVE!", $80 ;
 TITLE_TEXT_LENGTH   =        30+1 
 ; not all references are QUOTATIONS!
 level00Title 
