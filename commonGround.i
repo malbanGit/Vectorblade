@@ -96,15 +96,18 @@
                                                         ; button 1 help
                                                         ; button 2/3 y movement
                                                         ; button 4 exit
+;                    DB       "VERSION 1.08"            ; changed: switch off joystick on desktop in button mode
+                                                        ; changed: icon of "autofire" slightly to make it easier to distinguish with "shot 1"
 
 
-ADDITIONAL_INPUT = 1 ; added with v1.07
 
 ;
 TESTING             =        0                            ; switch between usiong TEST/Debug values (defined below) 
 ;
 TIMER_LEVEL         =        0                            ; if defined there is a time trialmodus, but implementaion not finished. 
                                                           ; todo: no warp, difficulty up, some more powerm no achievements, different high score, no warp 
+;
+ADDITIONAL_INPUT = 1 ; added with v1.07
 ;
 DO_DYING_BONUS      =        1                            ; on death sprawl up to 5 bonus items, whoch might be lost upon a death 
 ERRATIC_STARTING_WITH_HARD  =  1                          ; else startng with NORMAL 
@@ -158,7 +161,7 @@ CORRECT_START_LEVEL  =       0                            ; if 1, than level 25 
 ; ShadowRAM and copy to ROM feature (upper 16k)
 ; The V4E structure lies in Bank 1 ($8030) - followed by options and the highscore table(s).
 ;
-VECFEVER            =        0 
+VECFEVER            =        1 
 ;
 ;VECFEVER_FAKE = 1 ; don't execute any RAM/ROM copy for persistency
 ;
@@ -209,7 +212,7 @@ DRUNKEN_TIME        =        127                          ; positive - or code f
 ;...................
 ;
  if  TESTING = 1 
-START_LEVEL         =        56                           ;4 ;23;76;24 ;79; SHIELD 
+START_LEVEL         =        48                           ;4 ;23;76;24 ;79; SHIELD 
 MAX_LEVEL_SELECT_ALLOWED  =  1 
 DEFAULT_DIFFICULTY  =        EASY 
 TRY_MAJOR_HAVOC     =        0                            ; if defined, after Minestorm the major havoc part is invoked 
@@ -238,7 +241,7 @@ AUTO_FIRE           =        1
 MANY_MEGA           =        0                            ; if defined - MANY mega aliens will appear (if possible) 
 MINESTORM_INVINCIBLE  =      0 
 ENEMY_NO_SHOOTING   =        0 
-UNDYING             =        0 
+UNDYING             =        1 
 NO_ATTACK_PATTERN   =        0 
 NO_WOBBLE           =        0 
 ENEMY_UNDYING       =        0 
@@ -247,7 +250,7 @@ BUGS_DONT_MOVE      =        0
 BLINKING_SCOOPY_FIRE  =      0                            ; only as test implemented for 4 shots, this draw left/right only each alternate frame 
 SCOOPIE_DONT_DIE    =        0 
 WARP_FAILURE_BORDER  =       220 
-PLAYER_START_LIVES  =        1 
+PLAYER_START_LIVES  =        3
 START_POWER         =        0                            ;0 ;5 
 INGAMESECRETS       =        0                            ;0xff ;SECRET_3_FIFTY ; ff also invokes biggest loss! 
 SUPER_DIAMOND_BORDER  =      50 
@@ -329,7 +332,7 @@ NONE                =        0
                     DB       "VECTORBLADE", $80           ; some game information, ending with $80
 version
                     DB       $Fb, $40, -$00, -$40          ; hight, width, rel y, rel x (from 0,0) 
-                    DB       "VERSION 1.07",$80               ; some game information
+                    DB       "VERSION 1.08",$80               ; some game information
 ; if  VECFEVER = 1
 ;                    DB       $F8, $50, -$00, -$50           ; hight, width, rel y, rel x (from 0,0)
 ;                    DB       "GOLD 5 (VF)", $80            ; some game information, ending with $80

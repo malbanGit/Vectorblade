@@ -58,7 +58,13 @@ initScenery1                                              ;#isfunction
 oneVBTitleStep                                            ;#isfunction  
 ; ...................
 ; get current joystick position and remember it
+
                     clr      joystickDir 
+ if ADDITIONAL_INPUT = 1
+ ldb additionalFlags
+ andb #BIT_INPUT_VARIANT
+ bne noDekstopJoystick
+ endif
                     jsr      queryJoystick 
 ;
                     lda      Vec_Joy_1_X 
@@ -86,6 +92,7 @@ notUpt
                     sta      joystickDir 
 notDownt 
 joystickDone 
+noDekstopJoystick
 ; ...................
 ; draw command center
 ; screen is drawn "dim" from start - but gets brighter when swiched on
