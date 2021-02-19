@@ -830,8 +830,10 @@ REPLACE_1_2_levelSpeech_varFromIRQ0_1
 warpDoneLoop 
                     lda      achievements + 3 
                     anda     #ACHIEVEMENT_FLAG_BYTE4_SPY_RANK1 
-                    beq      noShopTest 
+;                    beq      noShopTest 
 ; test Joystick Button
+
+; fjfjfj
                                                           ; 
 REPLACE_1_2_getButtonState_varFrom0_32                    ;  bank 0 replace 
                     ldx      #0                           ; getButtonState 

@@ -82,7 +82,7 @@ LF19E\?:            BITA     <VIA_int_flags               ;Wait for timer t2
                     STB      <VIA_port_b                  ;disable mux 
                     endm     
 ;***************************************************************************
-_ZERO_VECTOR_BEAM2  macro    
+_ini_ZERO_VECTOR_BEAM2  macro    
                     LDB      #$CC 
                     STB      VIA_cntl                     ;/BLANK low and /ZERO low 
                     clra     

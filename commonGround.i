@@ -1,3 +1,5 @@
+;7 secrets in one game - and you can access a shop after each level :slight_smile: - oh shit... didn't test that with the new button configuration.... !=!)§(!=??
+
 
 ;
 ;                    DB       "VERSION 1.00"            ; Cartridges 1-30
@@ -70,6 +72,7 @@
                                                         ; changed: icon of "autofire" slightly to make it easier to distinguish with "shot 1"
 ;                    DB       "VERSION 1.09"            ; fixed: LIVE -> LIFE
                                                         ; fixed: debounce of button 4 in joystick mode, to enter highscore
+;                    DB       "VERSION 1.10"            ; fixed: High score stars were not displayed, entered somewhere along those last two revisions :-(
 
 
 
@@ -133,7 +136,7 @@ CORRECT_START_LEVEL  =       0                            ; if 1, than level 25 
 ; ShadowRAM and copy to ROM feature (upper 16k)
 ; The V4E structure lies in Bank 1 ($8030) - followed by options and the highscore table(s).
 ;
-VECFEVER            =        0 
+VECFEVER            =        1
 ;
 ;VECFEVER_FAKE = 1 ; don't execute any RAM/ROM copy for persistency
 ;
@@ -304,7 +307,7 @@ NONE                =        0
                     DB       "VECTORBLADE", $80           ; some game information, ending with $80
 version
                     DB       $Fb, $40, -$00, -$40          ; hight, width, rel y, rel x (from 0,0) 
-                    DB       "VERSION 1.09",$80               ; some game information
+                    DB       "VERSION 1.10",$80               ; some game information
 ; if  VECFEVER = 1
 ;                    DB       $F8, $50, -$00, -$50           ; hight, width, rel y, rel x (from 0,0)
 ;                    DB       "GOLD 5 (VF)", $80            ; some game information, ending with $80

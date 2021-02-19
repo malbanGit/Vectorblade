@@ -724,7 +724,7 @@ contButton
 ;;;;;;;;;;;;;;;;;
 
 ; insert x,y movement for button 2,3
-; map 2+3 to button 3 (pause)
+; map all 4 to button 3 (pause)
 ; map button 1 to button 2 bomb
 
  clrb
@@ -2747,7 +2747,7 @@ _ZERO_VECTOR_BEAM3  macro
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 _ZERO_VECTOR_BEAM2  macro    
-                    ldd      #%00110000 
+                    lda      #%00110000 
                     sta      <VIA_shift_reg 
                     LDb      #$CC                         ; BLANK false, ZERO true 
                     STB      <VIA_cntl                    ;/BLANK low and /ZERO low 

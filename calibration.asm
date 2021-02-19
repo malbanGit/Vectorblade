@@ -218,10 +218,12 @@ calib16                                                   ;#isfunction
 noTextHelp2 
                     lda      #DEFAULT_ENEMY_INTENSITY 
                     jsr      Intensity_a 
+
                     ldd      #$6640 
                     jsr      MoveToD 
                     ldd      #$0080 
                     jsr      DrawLined 
+
                     ldx      #calibrationValue16 
                     jsr      adjustCalibration 
 REPLACE_1_2_displayHSCalibrationText_varFromIRQ1_3        ;  bank 0 replace 
