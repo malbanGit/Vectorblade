@@ -254,9 +254,10 @@ saveCurrentBlock                                          ;#isfunction
                     lda      flashAvailable 
                     anda     #FLASH_AVAILABLE_BIT 
                     lbeq     flashErrorOut 
-                    jsr      writeFlashByte_2RAM 
+; changes for V1.11
                     bsr      findNextFlashBlock           ; also loads to X 
-                    lbeq     flashErrorOut 
+                    jsr      writeFlashByte_2RAM 
+                    ldx      currentFlashROMStart 
 ; first write options
                     ldu      #Ram_Options_Start 
 writeNextOptionByte 
