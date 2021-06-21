@@ -1,10 +1,3 @@
-;Hi Chris,
-;Yesterday I finished Vectorblade (the cartridge version you sold) if you have the laser equipt during the Death Star End boss the game crashes and goes to a black screen, 
-;Thought I let you know.
-;Best,
-;Sandy
-
-;7 secrets in one game - and you can access a shop after each level :slight_smile: - oh shit... didn't test that with the new button configuration.... !=!)§(!=??
 
 
 ;
@@ -83,7 +76,7 @@
                                                         ;        the vectrex was switched off after that, the game data was corrupted
 ;                    DB       "VERSION 1.12"            ; potentially the shop could be accessed at every level -this was "balance breaking"
                                                         ; for non VecFever this version also does not use 0x5555 and 0x5545 
-                                                        ; to potentially be able to flash the ROM while in "cartridge" form (Brett Wallach)
+                                                        ; to potentially be able to flash the ROM while in "cartridge" from (Brett Walach)
                                                         ; boss2Code.asm
 
 
