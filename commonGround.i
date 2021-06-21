@@ -148,7 +148,7 @@ CORRECT_START_LEVEL  =       0                            ; if 1, than level 25 
 ; ShadowRAM and copy to ROM feature (upper 16k)
 ; The V4E structure lies in Bank 1 ($8030) - followed by options and the highscore table(s).
 ;
-VECFEVER            =        1
+VECFEVER            =        0
 ;
 ;VECFEVER_FAKE = 1 ; don't execute any RAM/ROM copy for persistency
 ;
