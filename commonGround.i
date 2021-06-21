@@ -1,5 +1,3 @@
-
-
 ;
 ;                    DB       "VERSION 1.00"            ; Cartridges 1-30
 ;                    DB       "VERSION 1.01"            ; Cartridges 1-31 - "all" fixed: Immunity 2 games by wheel, was ovewritten bei level rollover
