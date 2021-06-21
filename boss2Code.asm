@@ -560,6 +560,14 @@ AntennaMiddle
                     DW       AntennaMiddle_0              ; list of all single vectorlists in this 
                     DW       AntennaMiddle_1 
                     DW       0 
+
+ if  VECFEVER = 1 
+ else  
+ org $5455
+ db 0 ; leave this byte alone, Bretts Cartridge "burner" can not flash that byte
+ DB "5456 Dont Touch last byte!"
+ endif
+
 AntennaMiddle_0 
                     db       $75, $01, $42, hi(SMVB50_continue_double), lo(SMVB50_continue_double) 
                     db       -$23, $01, $6C, hi(SMVB50_startDraw_double), lo(SMVB50_startDraw_double) 
@@ -613,6 +621,12 @@ MantisMain_0
                     db       -$21, $01, $0D, hi(SMVB50_continue2_single), lo(SMVB50_continue2_single) 
                     db       -$21, $01, $1C 
                     db       $40, $00, $00, hi(SMVB50_lastDraw_rts), lo(SMVB50_lastDraw_rts) 
+ if  VECFEVER = 1 
+ else  
+ org $5555
+ db 0 ; leave this byte alone, Bretts Cartridge "burner" can not flash that byte
+ DB "5556 Dont Touch last byte!"
+ endif
 MantisMain_1 
                     db       $64, $01, -$06, hi(SMVB50_continue_double), lo(SMVB50_continue_double) 
                     db       $00, $01, $0D, hi(SMVB50_startDraw_single), lo(SMVB50_startDraw_single) 

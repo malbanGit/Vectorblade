@@ -341,7 +341,7 @@ noModeSwitch
  ldb messageState
  lda tmpButtonMode
                     bita     #8
-                    bne      edit_highscore_inner 
+                    lbne      edit_highscore_inner 
                     ldb      #3 
                     stb      last_button_state 
                     stb      current_button_state 

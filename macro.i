@@ -191,7 +191,7 @@ INIT_MUSIC          macro    musicPiece
  if  IS_VIA_FAULTY_RESISTENT = 1 
 MY_MOVE_TO_D_START  macro    
                     STA      <VIA_port_a                  ;Store Y in D/A register 
-                    LDA      #$CE                         ;Blank low, zero high? 
+                    LDA      #$CE                         ;Blank low, zero high 
                     STA      <VIA_cntl                    ; 
                     CLRA     
                     STA      <VIA_port_b                  ;Enable mux ; hey dis si "break integratorzero 440" 

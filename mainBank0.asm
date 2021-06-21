@@ -3515,6 +3515,7 @@ hardcore
                     db       "ALX", $00,$00,$01,$00, $00
 defaultValuesEnd 
                     ds       $1000 -(defaultValuesEnd-defaultValuesStart) - 4*HighScoreEntry, 0xff ; test ,,, 
+
  endif  
  if  VECFEVER = 1 
 ; wheel sound data

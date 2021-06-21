@@ -1,3 +1,9 @@
+;Hi Chris,
+;Yesterday I finished Vectorblade (the cartridge version you sold) if you have the laser equipt during the Death Star End boss the game crashes and goes to a black screen, 
+;Thought I let you know.
+;Best,
+;Sandy
+
 ;7 secrets in one game - and you can access a shop after each level :slight_smile: - oh shit... didn't test that with the new button configuration.... !=!)§(!=??
 
 
@@ -75,6 +81,10 @@
 ;                    DB       "VERSION 1.10"            ; fixed: High score stars were not displayed, entered somewhere along those last two revisions :-(
 ;                    DB       "VERSION 1.11"            ; fixed: Fixed bug discovered by Ralf Kornmann, if data was saved exactly a multiple of 51 times, and
                                                         ;        the vectrex was switched off after that, the game data was corrupted
+;                    DB       "VERSION 1.12"            ; potentially the shop could be accessed at every level -this was "balance breaking"
+                                                        ; for non VecFever this version also does not use 0x5555 and 0x5545 
+                                                        ; to potentially be able to flash the ROM while in "cartridge" form (Brett Wallach)
+                                                        ; boss2Code.asm
 
 
 
@@ -138,7 +148,7 @@ CORRECT_START_LEVEL  =       0                            ; if 1, than level 25 
 ; ShadowRAM and copy to ROM feature (upper 16k)
 ; The V4E structure lies in Bank 1 ($8030) - followed by options and the highscore table(s).
 ;
-VECFEVER            =        0
+VECFEVER            =        1
 ;
 ;VECFEVER_FAKE = 1 ; don't execute any RAM/ROM copy for persistency
 ;
@@ -146,7 +156,7 @@ VECFEVER            =        0
 ;
 ; COLOR LED not working due to timing issues in VecFever
 ; Thomas disabled LED with IRQ-rom access (V4E type 10)
- if  VECFEVER = 1 
+ if  VECFEVER = 0
 ;
 ;
 ; if you change code and allow
@@ -189,7 +199,7 @@ DRUNKEN_TIME        =        127                          ; positive - or code f
 ;...................
 ;
  if  TESTING = 1 
-START_LEVEL         =        48                           ;4 ;23;76;24 ;79; SHIELD 
+START_LEVEL         =        73                           ;4 ;23;76;24 ;79; SHIELD 
 MAX_LEVEL_SELECT_ALLOWED  =  1 
 DEFAULT_DIFFICULTY  =        EASY 
 TRY_MAJOR_HAVOC     =        0                            ; if defined, after Minestorm the major havoc part is invoked 
@@ -199,7 +209,7 @@ ASSUME_CALIBRATION  =        0                            ; the calibrations val
 SKIP_TITLE_SCREEN   =        0                            ; 
 PLAYER_SHIELD_START  =       0                            ;BITFIELD_SCOOP ;BITFIELD_ARMOR = $80 ;BITFIELD_SHIELD = $40 ;BITFIELD_SCOOP = $20 ;BITFIELD_NOT_SCOOP = $ff-$20 
 START_SHOT_NUMBER   =        9                            ;2 
-START_SHOT_WIDTH    =        4                            ;3 ;1-4 normal shots, 5 triangle shot, 6 lazer 
+START_SHOT_WIDTH    =        6                            ;3 ;1-4 normal shots, 5 triangle shot, 6 lazer 
 START_FIGHTER_SPEED  =       900 
 START_SHOT_SPEED    =        900 
 SPEED_DELTA         =        25                           ; both shot and player 
@@ -309,7 +319,7 @@ NONE                =        0
                     DB       "VECTORBLADE", $80           ; some game information, ending with $80
 version
                     DB       $Fb, $40, -$00, -$40          ; hight, width, rel y, rel x (from 0,0) 
-                    DB       "VERSION 1.11",$80               ; some game information
+                    DB       "VERSION 1.12",$80               ; some game information
 ; if  VECFEVER = 1
 ;                    DB       $F8, $50, -$00, -$50           ; hight, width, rel y, rel x (from 0,0)
 ;                    DB       "GOLD 5 (VF)", $80            ; some game information, ending with $80

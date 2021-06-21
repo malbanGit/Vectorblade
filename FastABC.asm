@@ -134,7 +134,7 @@ ABC_8x5_6
                     db       -$0D, $01, -$1A 
                     db       -$34, $01, $34, hi(SMVB16_startMove_single), lo(SMVB16_startMove_single) 
                     db       $40, $00, $00, hi(SMVB16_lastDraw_rts_stay), lo(SMVB16_lastDraw_rts_stay) 
-ABC_8x5_7 
+ABC_8x5_7 ;J
                     db       $68, $01, $00, hi(SMVB16_startDraw_single), lo(SMVB16_startDraw_single) 
                     db       -$34, $01, $00, hi(SMVB16_startMove_yd4_single), lo(SMVB16_startMove_yd4_single) 
                     db       $0D, $01, $34, hi(SMVB16_startDraw_single), lo(SMVB16_startDraw_single) 
@@ -142,7 +142,7 @@ ABC_8x5_7
                     db       -$68, $01, $00, hi(SMVB16_startDraw_yd4_single), lo(SMVB16_startDraw_yd4_single) 
                     db       $ce, $01, $1A, hi(SMVB16_startMove_newY_eq_oldX_single), lo(SMVB16_startMove_newY_eq_oldX_single) ; y was $00, now $ce 
                     db       $40, $00, $00, hi(SMVB16_lastDraw_rts_stay), lo(SMVB16_lastDraw_rts_stay) 
-ABC_8x5_8 
+ABC_8x5_8 ;I
                     db       $0D, $01, $34, hi(SMVB16_startDraw_single), lo(SMVB16_startDraw_single) 
                     db       -$0D, $01, -$1A, hi(SMVB16_startMove_single), lo(SMVB16_startMove_single) 
                     db       $5B, $01, $00, hi(SMVB16_startDraw_single), lo(SMVB16_startDraw_single) 
@@ -216,7 +216,7 @@ ABC_8x5_17
                     db       -$34, $01, $34 
                     db       $00, $01, $1A, hi(SMVB16_startMove_single), lo(SMVB16_startMove_single) 
                     db       $40, $00, $00, hi(SMVB16_lastDraw_rts_stay), lo(SMVB16_lastDraw_rts_stay) 
-ABC_8x5_18 
+ABC_8x5_18 ; S
                     db       $68, $01, $34, hi(SMVB16_continue_single), lo(SMVB16_continue_single) 
                     db       -$0D, $01, -$34, hi(SMVB16_startDraw_yd4_single), lo(SMVB16_startDraw_yd4_single) 
                     db       -$27, $01, $00, hi(SMVB16_continue4_single), lo(SMVB16_continue4_single) 
@@ -225,7 +225,7 @@ ABC_8x5_18
                     db       -$0D, $01, -$34 
                     db       $00, $01, $4E, hi(SMVB16_startMove_single), lo(SMVB16_startMove_single) 
                     db       $40, $00, $00, hi(SMVB16_lastDraw_rts_stay), lo(SMVB16_lastDraw_rts_stay) 
-ABC_8x5_19 
+ABC_8x5_19 ; T
                     db       $00, $01, $1A, hi(SMVB16_continue_single), lo(SMVB16_continue_single) 
                     db       $5B, $01, $00, hi(SMVB16_startDraw_single), lo(SMVB16_startDraw_single) 
                     db       $ce, $01, -$1A, hi(SMVB16_startMove_newY_eq_oldX_single), lo(SMVB16_startMove_newY_eq_oldX_single) ; y was $00, now $ce 
