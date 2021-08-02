@@ -2155,6 +2155,7 @@ next_list_entry_ig2_b1
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 isBoss1             =        shotCount 
 extroBoss                                                 ;#isfunction  
+ clr playerWasHitFor ; add V1.13 Sandy
                     clr      isBoss1 
                     lda      diverseFlags 
                     anda     #BIT_FLAG_IS_BOSSFIGHT_ANY 
