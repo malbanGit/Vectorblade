@@ -76,6 +76,8 @@
                                                         ; for non VecFever this version also does not use 0x5555 and 0x5545 
                                                         ; to potentially be able to flash the ROM while in "cartridge" from (Brett Walach)
                                                         ; boss2Code.asm
+;                    DB       "VERSION 1.13"            ; fixed: player dead and BOSS clear at the same time, leads to endless loop
+                                                        ; nearly the same thing as V1.07 :-(
 
 
 
@@ -190,9 +192,9 @@ DRUNKEN_TIME        =        127                          ; positive - or code f
 ;...................
 ;
  if  TESTING = 1 
-START_LEVEL         =        73                           ;4 ;23;76;24 ;79; SHIELD 
+START_LEVEL         =        76                           ;4 ;23;76;24 ;79; SHIELD 
 MAX_LEVEL_SELECT_ALLOWED  =  1 
-DEFAULT_DIFFICULTY  =        EASY 
+DEFAULT_DIFFICULTY  =        NORMAL 
 TRY_MAJOR_HAVOC     =        0                            ; if defined, after Minestorm the major havoc part is invoked 
 SHORT_INVULNERABILITY  =     1                            ; if defined, desturction of armor renders you for 1 second invulnerable (shiled) 
 BOSS_FIGHT_DEATH_JUMP  =     0                            ; if 1, than a boss fight doe not jump back a random number of leveks 
@@ -200,12 +202,12 @@ ASSUME_CALIBRATION  =        0                            ; the calibrations val
 SKIP_TITLE_SCREEN   =        0                            ; 
 PLAYER_SHIELD_START  =       0                            ;BITFIELD_SCOOP ;BITFIELD_ARMOR = $80 ;BITFIELD_SHIELD = $40 ;BITFIELD_SCOOP = $20 ;BITFIELD_NOT_SCOOP = $ff-$20 
 START_SHOT_NUMBER   =        9                            ;2 
-START_SHOT_WIDTH    =        6                            ;3 ;1-4 normal shots, 5 triangle shot, 6 lazer 
+START_SHOT_WIDTH    =        4                            ;3 ;1-4 normal shots, 5 triangle shot, 6 lazer 
 START_FIGHTER_SPEED  =       900 
 START_SHOT_SPEED    =        900 
 SPEED_DELTA         =        25                           ; both shot and player 
 START_TIMER_MAX     =        250                          ; 10 seconds 
-DEAFULT_START_MONEY  =       5000 
+DEAFULT_START_MONEY  =       50000 
 MEGAFIEND_HP        =        300 
 MONEYSUCKER_HP      =        300 
 LOCK_START          =        %00010001                    ; 00SWLLLL S = scoopy shield, W = scoopy lock, LLLL = count of weapon lock 
@@ -219,20 +221,20 @@ AUTO_FIRE           =        1
 MANY_MEGA           =        0                            ; if defined - MANY mega aliens will appear (if possible) 
 MINESTORM_INVINCIBLE  =      0 
 ENEMY_NO_SHOOTING   =        0 
-UNDYING             =        1 
+UNDYING             =        0
 NO_ATTACK_PATTERN   =        0 
 NO_WOBBLE           =        0 
 ENEMY_UNDYING       =        0 
-SCOOPY_TEST         =        1                            ; not working, when shop is displayed! 
+SCOOPY_TEST         =        0                            ; not working, when shop is displayed! 
 BUGS_DONT_MOVE      =        0 
 BLINKING_SCOOPY_FIRE  =      0                            ; only as test implemented for 4 shots, this draw left/right only each alternate frame 
 SCOOPIE_DONT_DIE    =        0 
 WARP_FAILURE_BORDER  =       220 
 PLAYER_START_LIVES  =        3
-START_POWER         =        0                            ;0 ;5 
+START_POWER         =        5                            ;0 ;5 
 INGAMESECRETS       =        0                            ;0xff ;SECRET_3_FIFTY ; ff also invokes biggest loss! 
 SUPER_DIAMOND_BORDER  =      50 
-LEVEL_SELECT        =        1                            ; enable select difficulty levek (by adding achievements 
+LEVEL_SELECT        =        0                            ; enable select difficulty levek (by adding achievements 
 DIAMOND_STORM       =        0                            ; if set, every mine storm is a diamond storm 
 DONT_INCREASE_LEVELS  =      0                            ; if defined repeat the same level all over 
 ;
@@ -310,7 +312,7 @@ NONE                =        0
                     DB       "VECTORBLADE", $80           ; some game information, ending with $80
 version
                     DB       $Fb, $40, -$00, -$40          ; hight, width, rel y, rel x (from 0,0) 
-                    DB       "VERSION 1.12",$80               ; some game information
+                    DB       "VERSION 1.13",$80               ; some game information
 ; if  VECFEVER = 1
 ;                    DB       $F8, $50, -$00, -$50           ; hight, width, rel y, rel x (from 0,0)
 ;                    DB       "GOLD 5 (VF)", $80            ; some game information, ending with $80
